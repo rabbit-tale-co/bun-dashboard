@@ -87,7 +87,7 @@
                         class="flex items-center gap-2 text-lg font-semibold"
                      >
                         <img
-                           src="../../assets/vue.svg"
+                           src="../assets/rabbit_tale_logo.svg"
                            alt="logo"
                            class="size-6"
                         />
