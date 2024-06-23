@@ -31,15 +31,11 @@
         </SheetContent>
       </Sheet>
 
+      <router-link to="/">
+        <Logo class="mix-blend-difference" size="40" />
+        </router-link>
       <!-- Main Navigation Menu -->
       <NavigationMenu class="max-lg:hidden">
-        <router-link to="/">
-        <img
-          src="../assets/rabbit_tale_logo.svg"
-          alt="Tiny Rabbit Bot Logo"
-          class="size-10 mix-blend-difference mr-3"
-        />
-        </router-link>
         <NavigationMenuList>
           <NavigationMenuItem v-for="(item, i) in items" :key="i">
             <router-link v-if="!item.external" :to="item.path" :class="cn(navigationMenuTriggerStyle(), 'rounded-full')">{{ item.title }}</router-link>
@@ -126,6 +122,7 @@ import Separator from '@/components/ui/separator/Separator.vue'
 import { useAuth } from '@/utils/auth'
 import { useRouter } from 'vue-router'
 import { cn } from '@/lib/utils'
+import { Logo } from '@/components/ui/icons'
 
 const items = [
 	{

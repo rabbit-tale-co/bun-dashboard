@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { onMounted, ref, computed, onUnmounted, watch } from 'vue'
 import { cn } from '@/lib/utils'
 import { fetchBotStatusData } from '@/api/botStatus'
+import { Logo } from '@/components/ui/icons'
 
 const status = ref('online')
 const version = ref('NaN')
@@ -52,27 +53,27 @@ const statusLink = computed(() =>
 const statusText = computed(() =>
 	status.value === 'online' ? 'Rabbit Still Jumping' : 'Rabbit stopped jumping',
 )
+const rabbitClass = computed(() =>
+    status.value === 'online' ? 'inline-block animate-bounce mr-2' : '',
+)
 </script>
 
 <template>
    <footer
-      class="max-w-screen-lg mx-auto w-full space-y-2 lg:space-x-2 flex flex-col lg:flex-row items-start justify-between"
+      class="w-full flex justify-center"
    >
-      <section
+      <div class='max-w-screen-lg w-full space-y-2 lg:space-x-2 flex flex-col lg:flex-row items-start justify-between'>
+         <section
          class="order-2 lg:order-none flex flex-col justify-between w-full lg:w-auto"
       >
          <div
             class="text-muted-foreground text-sm mt-4 leading-7 [&:not(:first-child)]:mt-6"
          >
-            <router-link to="/">
-               <img
-                  src="../assets/rabbit_tale_logo.svg"
-                  alt="Tiny Rabbit Bot Logo"
-                  class="size-12 mb-10 mix-blend-difference"
-               />
+            <router-link to="/" class="inline-flex size-12 text-foreground">
+               <Logo class="mb-4" size="48" />
             </router-link>
             <p>
-               Tiny Rabbit 🐇
+               Tiny Rabbit <span :class="rabbitClass">🐇</span>
                <a href="#bot-change-log">
                   <Badge variant="secondary"> {{ version }} </Badge>
                </a>
@@ -244,5 +245,6 @@ const statusText = computed(() =>
             </div>
          </div>
       </section>
+      </div>
    </footer>
 </template>

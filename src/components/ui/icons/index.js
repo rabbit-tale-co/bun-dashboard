@@ -27,3 +27,5 @@ export { default as SolidHome } from '@/assets/icons/SolidHome.vue'
 export { default as SolidSunny } from '@/assets/icons/SolidSunny.vue'
 export { default as SolidCommand } from '@/assets/icons/SolidCommand.vue'
 export {default as SolidContentCopy} from '@/assets/icons/SolidContentCopy.vue'
+
+export { default as Logo } from '@/assets/icons/Logo.vue'

@@ -7,7 +7,7 @@
       <p v-if="error">{{ error }}</p>
       <header
          v-if="!loading && !error && guild"
-         class="flex items-center space-x-4 prose dark:prose-invert prose-headings:font-semibold"
+         class="flex items-start space-x-4"
       >
          <img
             v-if="guild.icon"
@@ -24,20 +24,26 @@
       </header>
 
       <section
-         class="flex space-x-6"
+         class="grid grid-cols-1 md:grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-3"
          v-if="!loading && !error && guild"
       >
-         <Card class="not-prose w-full">
+         <Card class="not-prose">
             <CardHeader>
-               <CardTitle>Server Info</CardTitle>
-               <!-- <CardDescription>{{
-               guild.description || 'No description available.'
-            }}</CardDescription> -->
+               <div class="flex justify-between mb-2">
+                  <div class="flex size-14 bg-primary items-center justify-center rounded-xl">
+                     <OutlineCarrot class="text-primary-foreground" />
+                  </div>
+                  <Button variant="premium" size="smIcon"><SolidCarrot class="mr-1" /> Premium</Button>
+               </div>
+               <CardTitle class="text-lg">
+                  Server Info
+               </CardTitle>
+               <CardDescription>
+                  {{ guild.description || 'No description available.' }}</CardDescription>
             </CardHeader>
             <CardContent>
                <article>
                   <section>
-                     <p><strong>ID:</strong> {{ guild.id }}</p>
                      <p>
                         <strong>Member Count:</strong>
                         {{ guild.memberCount }}
@@ -47,16 +53,63 @@
                   </section>
                </article>
             </CardContent>
+            <CardFooter>
+               <Button variant="secondary">Copy server ID</Button>
+            </CardFooter>
          </Card>
          <Card
             v-if="!loading && !error && guild"
-            class="not-prose w-full"
+            class="not-prose"
          >
             <CardHeader>
-               <CardTitle>Channels Info</CardTitle>
-               <!-- <CardDescription>{{
-               guild.description || 'No description available.'
-            }}</CardDescription> -->
+               <div class="flex justify-between mb-2">
+                  <div class="flex size-14 bg-primary items-center justify-center rounded-xl">
+                     <OutlineCarrot class="text-primary-foreground" />
+                  </div>
+                  <Button variant="premium" size="smIcon"><SolidCarrot class="mr-1" /> Premium</Button>
+               </div>
+               <CardTitle class="text-lg">
+                  Channels Info
+               </CardTitle>
+               <CardDescription>
+                  {{ guild.description || 'No description available.' }}</CardDescription>
+            </CardHeader>
+            <CardContent>
+               <article>
+                  <section>
+                     <p>
+                        <strong>Category Count:</strong>
+                        {{ guild.categoryCount }}
+                     </p>
+
+                     <p>
+                        <strong>Text Channel Count:</strong>
+                        {{ guild.textChannelCount }}
+                     </p>
+                     <p>
+                        <strong>Voice Channel Count:</strong>
+                        {{ guild.voiceChannelCount }}
+                     </p>
+                  </section>
+               </article>
+            </CardContent>
+         </Card>
+         <Card
+            v-if="!loading && !error && guild"
+            class="not-prose"
+         >
+            <CardHeader>
+               <div class="flex justify-between mb-2">
+                  <div class="flex size-14 bg-primary items-center justify-center rounded-xl">
+                     <OutlineCarrot class="text-primary-foreground" />
+                  </div>
+                  <Button variant="premium" size="smIcon"><SolidCarrot class="mr-1" /> Premium</Button>
+               </div>
+               <CardTitle class="text-lg">
+                  Channels Info
+               </CardTitle>
+               <CardDescription>
+                  {{ guild.description || 'No description available.' }}</CardDescription>
             </CardHeader>
             <CardContent>
                <article>
@@ -185,6 +238,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import Button from '@/components/ui/button/Button.vue'
+import CardFooter from '@/components/ui/card/CardFooter.vue'
+import CardDescription from '@/components/ui/card/CardDescription.vue'
+import OutlineCarrot from '@/assets/icons/OutlineCarrot.vue'
+import SolidCarrot from '@/assets/icons/SolidCarrot.vue'
 
 const router = useRouter()
 
