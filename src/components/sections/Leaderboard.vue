@@ -141,7 +141,7 @@ const updateUsersPerPage = () => {
   if (window.innerWidth >= 1024) {
     usersPerPage.value = 9;
   } else {
-    usersPerPage.value = 2;
+    usersPerPage.value = 3;
   }
 };
 
