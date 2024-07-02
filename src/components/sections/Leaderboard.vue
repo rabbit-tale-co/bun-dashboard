@@ -1,8 +1,8 @@
 <template>
   <section v-if="totalPages >= 1" class="relative z-10">
-    <div class="absolute h-56 w-full bg-background -z-10" />
+    <div class="absolute h-5/6 lg:h-56 w-full bg-background -z-10" />
     <div class="mx-auto w-full max-w-screen-xl text-center p-6 lg:py-10">
-      <h2 class="text-white mx-auto max-w-xl font-bold text-4xl leading-relaxed">Leaderboard</h2>
+      <h2 class="text-white mx-auto max-w-xl font-bold text-4xl leading-relaxed">Top 3 Leaderboard</h2>
       <h3 class="font-bold text-xl leading-tight">Tracked Over {{ formattedTotalXP }} XP</h3>
       <main class="mt-12">
         <div class="hidden lg:grid grid-cols-3 gap-8">
@@ -53,7 +53,7 @@
             </div>
           </div>
         </div>
-        <div class="mt-6 flex justify-center gap-4">
+        <!-- <div class="mt-6 flex justify-center gap-4">
           <Pagination v-if="totalPages > 1" v-slot="{ page }" :total="(totalPages * usersPerPage)" :sibling-count="1" v-model:page="currentPage" :items-per-page="usersPerPage">
             <PaginationList v-slot="{ items }" class="flex items-center gap-1">
               <PaginationFirst />
@@ -72,7 +72,7 @@
               <PaginationLast />
             </PaginationList>
           </Pagination>
-        </div>
+        </div> -->
       </main>
     </div>
   </section>
@@ -102,7 +102,7 @@ const totalXP = ref(0);
 const formattedTotalXP = computed(() => commaFormatter.format(totalXP.value));
 
 const currentPage = ref(1);
-const usersPerPage = ref(9); // Set the number of users per page as a ref
+const usersPerPage = ref(3); // Set the number of users per page as a ref
 
 const totalPages = ref(0);
 const isLoading = ref(false);
@@ -137,35 +137,12 @@ const refreshData = async () => {
   await fetchLeaderboard(currentPage.value, usersPerPage.value);
 };
 
-const updateUsersPerPage = () => {
-  if (window.innerWidth >= 1024) {
-    usersPerPage.value = 9;
-  } else {
-    usersPerPage.value = 3;
-  }
-};
-
-// Register lifecycle hooks before any await statements
-onBeforeUnmount(() => {
-  clearInterval(intervalId);
-  window.removeEventListener('resize', updateUsersPerPage);
-});
-
 onMounted(async () => {
-  updateUsersPerPage();
-  window.addEventListener('resize', updateUsersPerPage);
   await refreshData(); // Initial load
   const intervalId = setInterval(refreshData, 15 * 60 * 1000); // Refresh every 15 minutes
 });
 
 watch(currentPage, async (newPage) => {
   await fetchLeaderboard(newPage, usersPerPage.value);
-});
-
-// Watch for usersPerPage changes and refresh data once
-watch(usersPerPage, async (newUsersPerPage, oldUsersPerPage) => {
-  if (newUsersPerPage !== oldUsersPerPage) {
-    await refreshData();
-  }
 });
 </script>
