@@ -21,8 +21,16 @@ module.exports = {
          },
       },
       extend: {
+         minHeight: {
+            'screen-20': 'calc(100vh - 20%)'
+          },
          colors: {
             border: 'hsla(var(--border))',
+            scrollbar: {
+               track: 'hsla(var(--scrollbar-track))',
+               hover: 'hsla(var(--scrollbar-hover))',
+               thumb: 'hsla(var(--scrollbar-thumb))',
+            },
             input: 'hsla(var(--input))',
             ring: 'hsla(var(--ring))',
             background: 'hsla(var(--background))',
@@ -59,6 +67,7 @@ module.exports = {
             card: {
                DEFAULT: 'hsla(var(--card))',
                foreground: 'hsla(var(--card-foreground))',
+               hover: 'hsla(var(--card-hover))',
             },
          },
          borderRadius: {
