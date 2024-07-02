@@ -1,127 +1,128 @@
+<template>
+   <Hero />
+   <!-- <Statistics /> -->
+    <Leaderboard />
+   <Servers :servers="displayedServers" :serverCount="serverCount" />
+   <section class="mx-auto w-full max-w-screen-xl p-6 lg:py-10">
+     <div class="grid grid-cols-1 gap-12 lg:gap-36">
+       <Features v-for="(feature, index) in features" :key="index"
+         :imageSrc="feature.imageSrc"
+         :title="feature.title"
+         :description="feature.description"
+         :primaryButtonText="feature.primaryButtonText"
+         :primaryButtonLink="feature.primaryButtonLink"
+         :primaryButtonExternal="feature.primaryButtonExternal"
+         :secondaryButtonText="feature.secondaryButtonText"
+         :secondaryButtonLink="feature.secondaryButtonLink"
+         :reverse="index % 2 !== 0"
+       />
+     </div>
+   </section>
+   <section class="relative z-10">
+     <div class="absolute h-5/6 lg:h-3/4 w-full bg-background -z-10" />
+     <div class="mx-auto w-full max-w-screen-xl text-center p-6 lg:py-10">
+       <h2 class="text-white mx-auto max-w-xl font-bold text-4xl leading-tight">Tiny Rabbit is trusted and used by {{ serverCount }} servers</h2>
+       <main class="mt-12">
+         <div class="grid grid-cols-3 lg:grid-cols-4 gap-8">
+           <ServerCard v-for="(server, index) in displayedServers" :key="index"
+             :link="server.link"
+             :imageSrc="server.imageSrc"
+             :serverName="server.serverName"
+             :memberCount="server.memberCount"
+             :isCommunity="server.isCommunity"
+           />
+         </div>
+       </main>
+     </div>
+   </section>
+</template>
+
 <script setup>
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { SolidDiscord } from '@/components/ui/icons'
+import { ref, onMounted, computed } from 'vue';
+import { compactFormatter } from '@/utils/formatter';
+import { useBotGuilds } from '@/utils/botGuilds'
+
+const {
+  botGuilds,
+	fetchBotGuilds,
+  botGuildIsPending,
+  botGuildError
+} = useBotGuilds()
+
+const features = [
+  {
+    imageSrc: 'welcome_show.png',
+    title: 'Lorem ipsum dolor sit amet.',
+    description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo quisquam illo vitae quia dolores optio rem quod nam inventore, incidunt, necessitatibus quibusdam consequatur dicta ut. Vitae dignissimos repellat voluptate cumque.',
+    primaryButtonText: 'Add to Discord',
+    primaryButtonLink: 'https://discord.com/oauth2/authorize?client_id=1207315441614331904&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fapi.rabbittale.co%2Fcallback&integration_type=0&scope=bot+identify+guilds+email+guilds.members.read+messages.read',
+    primaryButtonExternal: true,
+    secondaryButtonText: 'button',
+    secondaryButtonLink: '#',
+  },
+  {
+    imageSrc: 'hero.png',
+    title: 'Lorem ipsum dolor sit amet.',
+    description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo quisquam illo vitae quia dolores optio rem quod nam inventore, incidunt, necessitatibus quibusdam consequatur dicta ut. Vitae dignissimos repellat voluptate cumque.',
+    primaryButtonText: 'button',
+    primaryButtonLink: '#',
+    primaryButtonExternal: false,
+    secondaryButtonText: 'button',
+    secondaryButtonLink: '#',
+  },
+  {
+    imageSrc: 'hero.png',
+    title: 'Lorem ipsum dolor sit amet.',
+    description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo quisquam illo vitae quia dolores optio rem quod nam inventore, incidunt, necessitatibus quibusdam consequatur dicta ut. Vitae dignissimos repellat voluptate cumque.',
+    primaryButtonText: 'button',
+    primaryButtonLink: '#',
+    primaryButtonExternal: false,
+    secondaryButtonText: 'button',
+    secondaryButtonLink: '#',
+  }
+]
+
+const allServers = ref([]) // This will store all the servers
+const displayedServers = ref([]) // This will store the servers to be displayed
+const totalXP = ref(0) // This will store the total XP of all servers
+
+onMounted(async () => {
+  await fetchBotGuilds()
+
+
+  if (!botGuildError.value) {
+    // Store all servers for counting
+    allServers.value = botGuilds.value.map(guild => ({
+      link: guild.isCommunity ? guild.inviteLink : '',
+      imageSrc: `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp?size=4096`,
+      serverName: guild.name,
+      memberCount: guild.memberCount,
+      isCommunity: guild.isCommunity
+    }))
+
+    // Sort and slice to get the top 8 servers to display
+    const sortedGuilds = allServers.value.sort((a, b) => b.memberCount - a.memberCount).slice(0, 8)
+    displayedServers.value = sortedGuilds.map(guild => ({
+      link: guild.link,
+      imageSrc: guild.imageSrc,
+      serverName: guild.serverName,
+      memberCount: compactFormatter.format(guild.memberCount),
+      isCommunity: guild.isCommunity
+    }))
+  }
+})
+
+const serverCount = computed(() => allServers.value.length)
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    const temp = array[i]
+    array[i] = array[j]
+    array[j] = temp
+  }
+}
 </script>
-
-<template>
-   <article
-      class="prose max-w-prose mx-auto dark:prose-invert prose-headings:font-semibold prose-img:rounded-3xl"
-   >
-      <header>
-         <img
-            src="../assets/hero.png"
-            alt="Tiny Rabbit Bot Logo"
-            class="mx-auto"
-         />
-         <h1>Welcome to Tiny Rabbit Bot Dashboard</h1>
-         <h2>
-            Your Ultimate Solution for Managing Discord Servers Efficiently
-         </h2>
-         <p>
-            Tiny Rabbit Bot is a powerful and versatile Discord bot designed to
-            simplify the management of your Discord server. Whether you are
-            running a small community or a large public server, Tiny Rabbit Bot
-            offers a suite of features that streamline moderation, enhance user
-            engagement, and provide detailed insights.
-         </p>
-         <div class="flex space-x-4 not-prose">
-            <Button
-               as-child
-               size="lg"
-               class="rounded-full"
-            >
-               <a
-                  href="https://discord.com/oauth2/authorize?client_id=1207315441614331904&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fapi.rabbittale.co%2Fcallback&integration_type=0&scope=bot+identify+guilds+email+guilds.members.read+messages.read"
-                  target="_blank"
-               >
-                  Add To Server
-               </a>
-            </Button>
-            <Button
-               as-child
-               variant="secondary"
-               size="lg"
-               class="rounded-full"
-            >
-               <a
-                  class="no-underline"
-                  href="https://discord.gg/dbHCceKAbc"
-                  target="_blank"
-               >
-                  Join Our Discord
-               </a>
-            </Button>
-         </div>
-      </header>
-
-      <section>
-         <h2>Key Features</h2>
-         <h3>Automated Moderation</h3>
-         <p>
-            Keep your server safe and friendly with automated moderation tools.
-            Tiny Rabbit Bot can automatically mute, kick, or ban users who
-            violate server rules, detect and filter out inappropriate language
-            or spam, and monitor server activity to generate moderation logs for
-            administrators.
-         </p>
-         <ul>
-            <li>
-               Automatically mute, kick, or ban users who violate server rules.
-               <Badge variant="secondary">Soon</Badge>
-            </li>
-            <li>
-               Detect and filter out inappropriate language or spam.
-               <Badge variant="secondary">Soon</Badge>
-            </li>
-            <li>
-               Monitor server activity and generate moderation logs for
-               administrators.
-               <Badge variant="secondary">Soon</Badge>
-            </li>
-         </ul>
-         <h3>Customizable Commands</h3>
-         <p>
-            Create custom commands to streamline server management and enhance
-            user engagement. Tiny Rabbit Bot allows you to define custom
-            commands that can be triggered by users, providing quick access to
-            information, resources, or fun interactions.
-         </p>
-         <ul>
-            <li>
-               Create custom commands for specific server functions.
-               <Badge variant="secondary">Soon</Badge>
-            </li>
-            <li>
-               Use built-in commands to manage roles, channels, and server
-               settings.
-            </li>
-            <li>
-               Schedule commands to run automatically at specified times.
-               <Badge variant="secondary">Soon</Badge>
-            </li>
-         </ul>
-      </section>
-
-      <section>
-         <h2>Why Choose Tiny Rabbit Bot?</h2>
-         <h3>Easy to Use</h3>
-         <p>
-            Tiny Rabbit Bot is designed with user-friendliness in mind. Its
-            intuitive dashboard makes it easy to configure and manage, even for
-            those with little technical experience.
-         </p>
-         <h3>Reliable and Secure</h3>
-         <p>
-            With a robust infrastructure and advanced security measures, Tiny
-            Rabbit Bot ensures that your server data is protected and your bot
-            is always online and responsive.
-         </p>
-         <h3>Community Support</h3>
-         <p>
-            Join our Discord community to connect with other server owners,
-            share tips and tricks, and get help with any questions or issues you
-            may have.
-         </p>
-      </section>
-   </article>
-</template>
