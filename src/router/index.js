@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Guild from '@/pages/Guild.vue'
 import GuildCommands from '@/pages/GuildCommands.vue'
-import Account from '@/pages/Account.vue'
 import LandingPage from '@/pages/LandingPage.vue'
 import PublicServers from '@/pages/PublicServers.vue'
 import Help from '@/pages/Help.vue'
 import Status from '@/pages/Status.vue'
+import Dashboard from '@/pages/Dashboard.vue'
 
 const routes = [
 	{
@@ -49,12 +49,12 @@ const routes = [
 		},
 	},
 	{
-		path: '/account',
-		name: 'Account',
-		component: Account,
+		path: '/dashboard',
+		name: 'Dashbaord',
+		component: Dashboard,
 		meta: {
-			title: 'Account',
-			describtion: 'Account page of Tiny Rabbit',
+			title: 'Dashboard',
+			describtion: 'Dashboard page of Tiny Rabbit',
 		},
 	},
 	{
