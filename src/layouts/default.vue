@@ -5,14 +5,10 @@ import Footer from '@/components/Footer.vue'
 </script>
 
 <template>
-   <div class="flex flex-col min-h-screen py-10 max-lg:p-4 space-y-10">
       <!-- <Sidebar /> -->
-      <Header />
-      <section class="flex-grow flex flex-col">
-         <main class="flex-grow max-w-screen-lg w-full mx-auto pb-4">
+      <Header class="py-5" />
+      <section class="flex-grow flex flex-col bg-backgroundSecondary">
             <router-view />
-         </main>
       </section>
-      <Footer class="flex-shrink-0" />
-   </div>
+      <Footer class="flex-shrink-0 py-10" />
 </template>
