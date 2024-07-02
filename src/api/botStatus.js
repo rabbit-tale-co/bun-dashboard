@@ -25,11 +25,12 @@ const fetchBotStatusData = async () => {
 	} catch (err) {
 		if (err instanceof Error && err.name === 'AbortError') {
 			return { status: 'offline', version: 'unknown' }
-		} else {
-			error.value =
-				err instanceof Error ? err.message : 'An unknown error occurred'
-			throw err
 		}
+
+		error.value =
+			err instanceof Error ? err.message : 'An unknown error occurred'
+		throw err
+
 	} finally {
 		loading.value = false
 	}
