@@ -1,56 +1,48 @@
 <template>
-   <Hero />
-   <!-- <Statistics /> -->
-    <Leaderboard />
-   <Servers :servers="displayedServers" :serverCount="serverCount" />
-   <section class="mx-auto w-full max-w-screen-xl p-6 lg:py-10">
-     <div class="grid grid-cols-1 gap-12 lg:gap-36">
-       <Features v-for="(feature, index) in features" :key="index"
-         :imageSrc="feature.imageSrc"
-         :title="feature.title"
-         :description="feature.description"
-         :primaryButtonText="feature.primaryButtonText"
-         :primaryButtonLink="feature.primaryButtonLink"
-         :primaryButtonExternal="feature.primaryButtonExternal"
-         :secondaryButtonText="feature.secondaryButtonText"
-         :secondaryButtonLink="feature.secondaryButtonLink"
-         :reverse="index % 2 !== 0"
-       />
-     </div>
-   </section>
-   <section class="relative z-10">
-     <div class="absolute h-5/6 lg:h-3/4 w-full bg-background -z-10" />
-     <div class="mx-auto w-full max-w-screen-xl text-center p-6 lg:py-10">
-       <h2 class="text-white mx-auto max-w-xl font-bold text-4xl leading-tight">Tiny Rabbit is trusted and used by {{ serverCount }} servers</h2>
-       <main class="mt-12">
-         <div class="grid grid-cols-3 lg:grid-cols-4 gap-8">
-           <ServerCard v-for="(server, index) in displayedServers" :key="index"
-             :link="server.link"
-             :imageSrc="server.imageSrc"
-             :serverName="server.serverName"
-             :memberCount="server.memberCount"
-             :isCommunity="server.isCommunity"
-           />
-         </div>
-       </main>
-     </div>
-   </section>
+  <Hero />
+  <Leaderboard />
+  <Servers :servers="displayedServers" :serverCount="serverCount" />
+  <section class="mx-auto w-full max-w-screen-xl p-6 lg:py-10">
+    <div class="grid grid-cols-1 gap-12 lg:gap-36">
+      <Features v-for="(feature, index) in features" :key="index"
+        :imageSrc="feature.imageSrc"
+        :title="feature.title"
+        :description="feature.description"
+        :primaryButtonText="feature.primaryButtonText"
+        :primaryButtonLink="feature.primaryButtonLink"
+        :primaryButtonExternal="feature.primaryButtonExternal"
+        :secondaryButtonText="feature.secondaryButtonText"
+        :secondaryButtonLink="feature.secondaryButtonLink"
+        :reverse="index % 2 !== 0"
+      />
+    </div>
+  </section>
+  <section class="relative z-10">
+    <div class="absolute h-5/6 lg:h-3/4 w-full bg-background -z-10" />
+    <div class="mx-auto w-full max-w-screen-xl text-center p-6 lg:py-10">
+      <h2 class="text-white mx-auto max-w-xl font-bold text-4xl leading-tight">Tiny Rabbit is trusted and used by {{ serverCount }} servers</h2>
+      <main class="mt-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <ServerCard v-for="(server, index) in displayedServers" :key="index"
+            :link="server.link"
+            :imageSrc="server.imageSrc"
+            :serverName="server.serverName"
+            :memberCount="server.memberCount"
+            :isCommunity="server.isCommunity"
+          />
+        </div>
+      </main>
+    </div>
+  </section>
 </template>
 
 <script setup>
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { SolidDiscord } from '@/components/ui/icons'
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { compactFormatter } from '@/utils/formatter';
-import { useBotGuilds } from '@/utils/botGuilds'
+import { useBotGuilds } from '@/utils/botGuilds';
+import { onBeforeUnmount } from 'vue'
 
-const {
-  botGuilds,
-	fetchBotGuilds,
-  botGuildIsPending,
-  botGuildError
-} = useBotGuilds()
+const { botGuilds, fetchBotGuilds, botGuildIsPending, botGuildError } = useBotGuilds();
 
 const features = [
   {
@@ -83,15 +75,13 @@ const features = [
     secondaryButtonText: 'button',
     secondaryButtonLink: '#',
   }
-]
+];
 
-const allServers = ref([]) // This will store all the servers
-const displayedServers = ref([]) // This will store the servers to be displayed
-const totalXP = ref(0) // This will store the total XP of all servers
+const allServers = ref([]); // This will store all the servers
+const displayedServers = ref([]); // This will store the servers to be displayed
 
 onMounted(async () => {
-  await fetchBotGuilds()
-
+  await fetchBotGuilds();
 
   if (!botGuildError.value) {
     // Store all servers for counting
@@ -101,28 +91,44 @@ onMounted(async () => {
       serverName: guild.name,
       memberCount: guild.memberCount,
       isCommunity: guild.isCommunity
-    }))
+    }));
 
-    // Sort and slice to get the top 8 servers to display
-    const sortedGuilds = allServers.value.sort((a, b) => b.memberCount - a.memberCount).slice(0, 8)
-    displayedServers.value = sortedGuilds.map(guild => ({
-      link: guild.link,
-      imageSrc: guild.imageSrc,
-      serverName: guild.serverName,
-      memberCount: compactFormatter.format(guild.memberCount),
-      isCommunity: guild.isCommunity
-    }))
+    // Initially update displayedServers based on current screen size
+    updateDisplayedServers();
   }
-})
+});
 
-const serverCount = computed(() => allServers.value.length)
+const serverCount = computed(() => allServers.value.length);
 
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    const temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
+const updateDisplayedServers = () => {
+  const screenWidth = window.innerWidth;
+  let serversToDisplay;
+
+  if (screenWidth >= 1024) {
+    // Display top 8 servers for screens larger than lg
+    serversToDisplay = allServers.value.slice(0, 8);
+  } else {
+    // Display top 3 servers for screens smaller than lg
+    serversToDisplay = allServers.value.slice(0, 3);
   }
-}
+
+  displayedServers.value = serversToDisplay.map(guild => ({
+    link: guild.link,
+    imageSrc: guild.imageSrc,
+    serverName: guild.serverName,
+    memberCount: compactFormatter.format(guild.memberCount),
+    isCommunity: guild.isCommunity
+  }));
+};
+
+const handleResize = () => {
+  updateDisplayedServers();
+};
+
+window.addEventListener('resize', handleResize);
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
 </script>

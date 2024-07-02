@@ -118,7 +118,7 @@ const rabbitClass = computed(() =>
                      variant="link"
                      size="link"
                   >
-                     <a href="#">Tiny Rabbit Bot</a>
+                     <a href="#">Tiny Rabbit</a>
                   </Button>
                </li>
                <li>
@@ -136,7 +136,7 @@ const rabbitClass = computed(() =>
                      variant="link"
                      size="link"
                   >
-                     <a href="#">Bot Commands</a>
+                     <a href="#">Plugins</a>
                   </Button>
                </li>
                <li>

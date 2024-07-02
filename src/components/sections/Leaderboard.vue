@@ -1,21 +1,47 @@
 <template>
-  <section class="relative z-10">
+  <section v-if="totalPages >= 1" class="relative z-10">
     <div class="absolute h-5/6 lg:h-56 w-full bg-background -z-10" />
     <div class="mx-auto w-full max-w-screen-xl text-center p-6 lg:py-10">
       <h2 class="text-white mx-auto max-w-xl font-bold text-4xl leading-relaxed">Leaderboard</h2>
       <h3 class="font-bold text-xl leading-tight">Tracked Over {{ formattedTotalXP }} XP</h3>
       <main class="mt-12">
-        <div class="grid grid-cols-3 gap-8">
-            <div v-if="isLoading" v-for="i in usersPerPage" :key="i" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
-              <p :class="getRankClass((currentPage - 1) * usersPerPage + index)">
-                #0
-              </p>
-              <Skeleton class="size-12 rounded-full ml-4 bg-white/10" />
-              <div class="ml-4 text-left text-base flex flex-1 flex-col">
-                <Skeleton class="w-3/4 h-5 mb-2 bg-white/10" />
-                <Skeleton class="w-1/2 h-4 bg-white/10" />
+        <div class="hidden lg:grid grid-cols-3 gap-8">
+          <div v-if="isLoading" v-for="i in usersPerPage" :key="i" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
+            <p :class="getRankClass((currentPage - 1) * usersPerPage + i)">
+              #0
+            </p>
+            <Skeleton class="size-12 rounded-full ml-4 bg-white/10" />
+            <div class="ml-4 text-left text-base flex flex-1 flex-col">
+              <Skeleton class="w-3/4 h-5 mb-2 bg-white/10" />
+              <Skeleton class="w-1/2 h-4 bg-white/10" />
+            </div>
+          </div>
+          <div v-else v-for="(user, index) in topUsers" :key="user.userId" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
+            <p :class="getRankClass((currentPage - 1) * usersPerPage + index)">
+              #{{ (currentPage - 1) * usersPerPage + index + 1 }}
+            </p>
+            <img :src="user.avatarUrl" class="size-12 rounded-full ml-4" :alt="user.username">
+            <div class="ml-4 text-left text-base">
+              <div class="flex items-start justify-start text-white">
+                <p class="font-bold line-clamp-1">{{ user.globalName }}</p>
+              </div>
+              <div class="flex items-center justify-start text-muted-foreground">
+                <p class="text-base">{{ commaFormatter.format(user.xp) }} XP</p>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="lg:hidden grid grid-cols-2 gap-8">
+          <div v-if="isLoading" v-for="i in usersPerPage" :key="i" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
+            <p :class="getRankClass((currentPage - 1) * usersPerPage + i)">
+              #0
+            </p>
+            <Skeleton class="size-12 rounded-full ml-4 bg-white/10" />
+            <div class="ml-4 text-left text-base flex flex-1 flex-col">
+              <Skeleton class="w-3/4 h-5 mb-2 bg-white/10" />
+              <Skeleton class="w-1/2 h-4 bg-white/10" />
+            </div>
+          </div>
           <div v-else v-for="(user, index) in topUsers" :key="user.userId" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
             <p :class="getRankClass((currentPage - 1) * usersPerPage + index)">
               #{{ (currentPage - 1) * usersPerPage + index + 1 }}
@@ -32,7 +58,7 @@
           </div>
         </div>
         <div class="mt-6 flex justify-center gap-4">
-          <Pagination v-if="totalPages > 1" v-slot="{ page }" :total="(totalPages * usersPerPage)" :sibling-count="3" v-model:page="currentPage" :items-per-page="usersPerPage">
+          <Pagination v-if="totalPages > 1" v-slot="{ page }" :total="(totalPages * usersPerPage)" :sibling-count="1" v-model:page="currentPage" :items-per-page="usersPerPage">
             <PaginationList v-slot="{ items }" class="flex items-center gap-1">
               <PaginationFirst />
               <PaginationPrev />
@@ -71,7 +97,6 @@ import {
 	PaginationNext,
 	PaginationPrev,
 } from '@/components/ui/pagination'
-//import { fetchTotalXPData } from '@/api/totalXP' // Ensure the correct path
 import { Skeleton } from '@/components/ui/skeleton'
 import { fetchTotalXPData } from '@/api/totalXP'
 
@@ -81,7 +106,7 @@ const totalXP = ref(0)
 const formattedTotalXP = computed(() => commaFormatter.format(totalXP.value))
 
 const currentPage = ref(1)
-const usersPerPage = 9 // Ustawienie liczby użytkowników na stronę do 9
+const usersPerPage = ref(9) // Ustawienie liczby użytkowników na stronę jako ref
 
 const totalPages = ref(0)
 const isLoading = ref(false)
@@ -113,16 +138,36 @@ const getRankClass = (rank) => {
 }
 
 const refreshData = async () => {
-	await fetchLeaderboard(currentPage.value, usersPerPage)
+	await fetchLeaderboard(currentPage.value, usersPerPage.value)
+}
+
+const updateUsersPerPage = () => {
+  if (window.innerWidth >= 1024) {
+    usersPerPage.value = 9
+  } else {
+    usersPerPage.value = 4
+  }
 }
 
 onMounted(async () => {
-	await refreshData() // Initial load
-	const intervalId = setInterval(refreshData, 15 * 60 * 1000) // Refresh every 15 minutes
-	onBeforeUnmount(() => clearInterval(intervalId)) // Clear interval when component is unmounted
+  updateUsersPerPage()
+  window.addEventListener('resize', updateUsersPerPage)
+  await refreshData() // Initial load
+  const intervalId = setInterval(refreshData, 15 * 60 * 1000) // Refresh every 15 minutes
+  onBeforeUnmount(() => {
+    clearInterval(intervalId) // Clear interval when component is unmounted
+    window.removeEventListener('resize', updateUsersPerPage)
+  })
 })
 
 watch(currentPage, async (newPage) => {
-	await fetchLeaderboard(newPage, usersPerPage)
+	await fetchLeaderboard(newPage, usersPerPage.value)
+})
+
+// Watch for usersPerPage changes and refresh data once
+watch(usersPerPage, async (newUsersPerPage, oldUsersPerPage) => {
+  if (newUsersPerPage !== oldUsersPerPage) {
+    await refreshData()
+  }
 })
 </script>
