@@ -1,5 +1,5 @@
 <template>
-  <section class="relative z-10">
+  <section v-if="totalPages >= 1" class="relative z-10">
     <div class="absolute h-5/6 lg:h-56 w-full bg-background -z-10" />
     <div class="mx-auto w-full max-w-screen-xl text-center p-6 lg:py-10">
       <h2 class="text-white mx-auto max-w-xl font-bold text-4xl leading-relaxed">Leaderboard</h2>
