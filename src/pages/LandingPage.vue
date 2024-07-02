@@ -37,10 +37,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed, watch, onBeforeUnmount } from 'vue';
 import { compactFormatter } from '@/utils/formatter';
 import { useBotGuilds } from '@/utils/botGuilds';
-import { onBeforeUnmount } from 'vue'
 
 const { botGuilds, fetchBotGuilds, botGuildIsPending, botGuildError } = useBotGuilds();
 
@@ -104,12 +103,15 @@ const updateDisplayedServers = () => {
   const screenWidth = window.innerWidth;
   let serversToDisplay;
 
+  // Sort allServers by memberCount in descending order
+  const sortedServers = allServers.value.sort((a, b) => b.memberCount - a.memberCount);
+
   if (screenWidth >= 1024) {
     // Display top 8 servers for screens larger than lg
-    serversToDisplay = allServers.value.slice(0, 8);
+    serversToDisplay = sortedServers.slice(0, 8);
   } else {
     // Display top 3 servers for screens smaller than lg
-    serversToDisplay = allServers.value.slice(0, 3);
+    serversToDisplay = sortedServers.slice(0, 3);
   }
 
   displayedServers.value = serversToDisplay.map(guild => ({
@@ -130,5 +132,4 @@ window.addEventListener('resize', handleResize);
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize);
 });
-
 </script>

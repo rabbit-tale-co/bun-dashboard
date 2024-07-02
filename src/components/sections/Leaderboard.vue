@@ -1,5 +1,5 @@
 <template>
-  <section v-if="totalPages >= 1" class="relative z-10">
+  <section class="relative z-10">
     <div class="absolute h-5/6 lg:h-56 w-full bg-background -z-10" />
     <div class="mx-auto w-full max-w-screen-xl text-center p-6 lg:py-10">
       <h2 class="text-white mx-auto max-w-xl font-bold text-4xl leading-relaxed">Leaderboard</h2>
@@ -7,9 +7,7 @@
       <main class="mt-12">
         <div class="hidden lg:grid grid-cols-3 gap-8">
           <div v-if="isLoading" v-for="i in usersPerPage" :key="i" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
-            <p :class="getRankClass((currentPage - 1) * usersPerPage + i)">
-              #0
-            </p>
+            <p>#0</p>
             <Skeleton class="size-12 rounded-full ml-4 bg-white/10" />
             <div class="ml-4 text-left text-base flex flex-1 flex-col">
               <Skeleton class="w-3/4 h-5 mb-2 bg-white/10" />
@@ -31,11 +29,9 @@
             </div>
           </div>
         </div>
-        <div class="lg:hidden grid md:grid-cols-2 gap-8">
+        <div class="lg:hidden grid grid-cols-2 gap-8">
           <div v-if="isLoading" v-for="i in usersPerPage" :key="i" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
-            <p :class="getRankClass((currentPage - 1) * usersPerPage + i)">
-              #0
-            </p>
+            <p>#0</p>
             <Skeleton class="size-12 rounded-full ml-4 bg-white/10" />
             <div class="ml-4 text-left text-base flex flex-1 flex-col">
               <Skeleton class="w-3/4 h-5 mb-2 bg-white/10" />
@@ -83,91 +79,93 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
-import { useLeaderboard } from '@/api/leaderboard' // Ensure the path is correct
-import { commaFormatter } from '@/utils/formatter'
-import { Button } from '@/components/ui/button'
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
+import { useLeaderboard } from '@/api/leaderboard';
+import { commaFormatter } from '@/utils/formatter';
+import { Button } from '@/components/ui/button';
 import {
-	Pagination,
-	PaginationEllipsis,
-	PaginationFirst,
-	PaginationLast,
-	PaginationList,
-	PaginationListItem,
-	PaginationNext,
-	PaginationPrev,
-} from '@/components/ui/pagination'
-import { Skeleton } from '@/components/ui/skeleton'
-import { fetchTotalXPData } from '@/api/totalXP'
+  Pagination,
+  PaginationEllipsis,
+  PaginationFirst,
+  PaginationLast,
+  PaginationList,
+  PaginationListItem,
+  PaginationNext,
+  PaginationPrev,
+} from '@/components/ui/pagination';
+import { Skeleton } from '@/components/ui/skeleton';
+import { fetchTotalXPData } from '@/api/totalXP';
 
-const { fetchGlobalLeaderboardData, isPending, error } = useLeaderboard()
-const topUsers = ref([])
-const totalXP = ref(0)
-const formattedTotalXP = computed(() => commaFormatter.format(totalXP.value))
+const { fetchGlobalLeaderboardData, isPending, error } = useLeaderboard();
+const topUsers = ref([]);
+const totalXP = ref(0);
+const formattedTotalXP = computed(() => commaFormatter.format(totalXP.value));
 
-const currentPage = ref(1)
-const usersPerPage = ref(9) // Ustawienie liczby użytkowników na stronę jako ref
+const currentPage = ref(1);
+const usersPerPage = ref(9); // Set the number of users per page as a ref
 
-const totalPages = ref(0)
-const isLoading = ref(false)
+const totalPages = ref(0);
+const isLoading = ref(false);
 
 const fetchLeaderboard = async (page, limit) => {
-	isLoading.value = true
-	error.value = null
-	try {
-		const { leaderboard, totalUsers, totalXp } = await fetchGlobalLeaderboardData(
-			page,
-			limit,
-		)
-    totalXP.value = totalXp
-		topUsers.value = leaderboard
-		totalPages.value = Math.ceil(totalUsers / limit)
-	} catch (err) {
-		error.value = err.message
-		console.error('Error fetching leaderboard:', err)
-	} finally {
-		isLoading.value = false
-	}
-}
+  isLoading.value = true;
+  error.value = null;
+  try {
+    const { leaderboard, totalUsers, totalXp } = await fetchGlobalLeaderboardData(
+      page,
+      limit,
+    );
+    totalXP.value = totalXp;
+    topUsers.value = leaderboard;
+    totalPages.value = Math.ceil(totalUsers / limit);
+  } catch (err) {
+    error.value = err.message;
+    console.error('Error fetching leaderboard:', err);
+  } finally {
+    isLoading.value = false;
+  }
+};
 
 const getRankClass = (rank) => {
-	if (rank === 0) return 'text-[#ffd700]'
-	if (rank === 1) return 'text-[#c0c0c0]'
-	if (rank === 2) return 'text-[#cd7f32]'
-	return 'text-white/30'
-}
+  if (rank === 0) return 'text-[#ffd700]';
+  if (rank === 1) return 'text-[#c0c0c0]';
+  if (rank === 2) return 'text-[#cd7f32]';
+  return 'text-white/30';
+};
 
 const refreshData = async () => {
-	await fetchLeaderboard(currentPage.value, usersPerPage.value)
-}
+  await fetchLeaderboard(currentPage.value, usersPerPage.value);
+};
 
 const updateUsersPerPage = () => {
   if (window.innerWidth >= 1024) {
-    usersPerPage.value = 9
+    usersPerPage.value = 9;
   } else {
-    usersPerPage.value = 4
+    usersPerPage.value = 2;
   }
-}
+};
+
+// Register lifecycle hooks before any await statements
+onBeforeUnmount(() => {
+  clearInterval(intervalId);
+  window.removeEventListener('resize', updateUsersPerPage);
+});
 
 onMounted(async () => {
-  updateUsersPerPage()
-  window.addEventListener('resize', updateUsersPerPage)
-  await refreshData() // Initial load
-  const intervalId = setInterval(refreshData, 15 * 60 * 1000) // Refresh every 15 minutes
-  onBeforeUnmount(() => {
-    clearInterval(intervalId) // Clear interval when component is unmounted
-    window.removeEventListener('resize', updateUsersPerPage)
-  })
-})
+  updateUsersPerPage();
+  window.addEventListener('resize', updateUsersPerPage);
+  await refreshData(); // Initial load
+  const intervalId = setInterval(refreshData, 15 * 60 * 1000); // Refresh every 15 minutes
+});
 
 watch(currentPage, async (newPage) => {
-	await fetchLeaderboard(newPage, usersPerPage.value)
-})
+  await fetchLeaderboard(newPage, usersPerPage.value);
+});
 
 // Watch for usersPerPage changes and refresh data once
 watch(usersPerPage, async (newUsersPerPage, oldUsersPerPage) => {
   if (newUsersPerPage !== oldUsersPerPage) {
-    await refreshData()
+    await refreshData();
   }
-})
+});
 </script>
