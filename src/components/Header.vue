@@ -30,12 +30,12 @@
         </SheetContent>
       </Sheet>
 
-      <router-link to="/" class="mr-4">
+      <router-link to="/" class="mr-4 max-lg:hidden">
         <Logo size="40" />
-        </router-link>
+      </router-link>
       <!-- Main Navigation Menu -->
       <ul class="flex items-center">
-        <button @click="toggleMenu" class="flex items-center">
+        <button @click="toggleMenu" class="flex items-center  max-lg:hidden">
           Plugins
           <OutlineChevronRight size="16" class="ml-2 rotate-90" />
         </button>
