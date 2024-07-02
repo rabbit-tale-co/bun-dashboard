@@ -71,8 +71,9 @@ import {
 	PaginationNext,
 	PaginationPrev,
 } from '@/components/ui/pagination'
-import { fetchTotalXPData } from '@/api/totalXP' // Ensure the correct path
+//import { fetchTotalXPData } from '@/api/totalXP' // Ensure the correct path
 import { Skeleton } from '@/components/ui/skeleton'
+import { fetchTotalXPData } from '@/api/totalXP'
 
 const { fetchGlobalLeaderboardData, isPending, error } = useLeaderboard()
 const topUsers = ref([])
@@ -89,10 +90,11 @@ const fetchLeaderboard = async (page, limit) => {
 	isLoading.value = true
 	error.value = null
 	try {
-		const { leaderboard, totalUsers } = await fetchGlobalLeaderboardData(
+		const { leaderboard, totalUsers, totalXp } = await fetchGlobalLeaderboardData(
 			page,
 			limit,
 		)
+    totalXP.value = totalXp
 		topUsers.value = leaderboard
 		totalPages.value = Math.ceil(totalUsers / limit)
 	} catch (err) {
@@ -112,7 +114,6 @@ const getRankClass = (rank) => {
 
 const refreshData = async () => {
 	await fetchLeaderboard(currentPage.value, usersPerPage)
-	totalXP.value = await fetchTotalXPData()
 }
 
 onMounted(async () => {
