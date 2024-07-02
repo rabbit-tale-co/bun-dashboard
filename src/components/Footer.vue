@@ -62,7 +62,7 @@ const rabbitClass = computed(() =>
    <footer
       class="w-full flex justify-center"
    >
-      <div class='max-w-screen-lg w-full space-y-2 lg:space-x-2 flex flex-col lg:flex-row items-start justify-between'>
+      <div class='max-w-screen-xl w-full px-6 space-y-2 lg:space-x-2 flex flex-col lg:flex-row items-start justify-between'>
          <section
          class="order-2 lg:order-none flex flex-col justify-between w-full lg:w-auto"
       >
@@ -82,7 +82,12 @@ const rabbitClass = computed(() =>
                   variant="link"
                   size="link"
                >
-                  <span :class="cn('size-2', 'mx-2', statusIndicator)" />
+                  <div class="relative inline-flex">
+                     <div :class="cn('size-2 mx-2 rounded-full', statusIndicator)" />
+                     <div :class="cn('size-2 mx-2 rounded-full absolute top-0 left-0 animate-ping', statusIndicator)" />
+                     <div :class="cn('size-2 mx-2 rounded-full absolute top-0 left-0 animate-pulse', statusIndicator)" />
+                  </div>
+                  <!-- <span :class="cn('size-2', 'mx-2', statusIndicator)" /> -->
                   <a
                      :class="cn(statusLink, 'hover:underline')"
                      href="#"
@@ -102,7 +107,7 @@ const rabbitClass = computed(() =>
       >
          <div>
             <h4
-               class="scroll-m-20 text-base font-semibold tracking-tight uppercase"
+               class="mb-6 text-white text-sm uppercase"
             >
                Tiny Rabbit 🐇
             </h4>
@@ -165,7 +170,7 @@ const rabbitClass = computed(() =>
          </div>
          <div>
             <h4
-               class="scroll-m-20 text-base font-semibold tracking-tight uppercase"
+               class="mb-6 text-white text-sm uppercase"
             >
                Legal
             </h4>
@@ -201,7 +206,7 @@ const rabbitClass = computed(() =>
          </div>
          <div>
             <h4
-               class="scroll-m-20 text-base font-semibold tracking-tight uppercase"
+               class="mb-6 text-white text-sm uppercase"
             >
                Contact
             </h4>
