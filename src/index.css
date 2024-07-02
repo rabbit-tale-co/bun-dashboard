@@ -17,8 +17,9 @@
       --popover: 0 0% 100%;
       --popover-foreground: 224 71.4% 4.1%;
 
-      --card: 0 0% 100%;
+      --card: 221, 14%, 82%;
       --card-foreground: 224 71.4% 4.1%;
+      --card-hover: 228, 7%, 73%;
 
       --border: 220 13% 91%;
       --input: 220 13% 91%;
@@ -56,14 +57,19 @@
       /* --background: 224 71.4% 4.1%;
       --foreground: 210 20% 98%; */
 
+      --scrollbar-track: 228, 14%, 14%;
+      --scrollbar-thumb: 231, 14%, 35%;
+      --scrollbar-hover: 231, 14%, 45%;
+
       --muted: 215 27.9% 16.9%;
       --muted-foreground: 217.9 10.6% 64.9%;
 
       --popover: 224 71.4% 4.1%;
       --popover-foreground: 210 20% 98%;
 
-      --card: 224 71.4% 4.1%;
+      --card: 228, 14%, 14%;
       --card-foreground: 210 20% 98%;
+      --card-hover: 231, 13%, 10%;
 
       --border: 215 27.9% 16.9%;
       --input: 215 27.9% 16.9%;
@@ -101,15 +107,34 @@
    }
 }
 ::selection {
-    background-color: hsl(var(--primary) /.4);
+    @apply bg-primary/40
 }
+
+/* ::-webkit-scrollbar {
+   @apply bg-transparent size-[.6em]
+}
+
+::-webkit-scrollbar-track {
+   @apply bg-scrollbar-track
+}
+
+::-webkit-scrollbar-thumb {
+   @apply bg-scrollbar-thumb rounded-full
+}
+
+::-webkit-scrollbar-thumb:hover {
+   @apply bg-scrollbar-hover
+} */
 
 @layer base {
    * {
       @apply border-border;
    }
    body {
-      @apply bg-background text-foreground;
+      @apply bg-background text-foreground w-screen min-h-screen overflow-x-hidden p-0 h-full mx-auto scroll-smooth;
+   }
+   #app {
+      @apply h-full min-h-screen;
    }
 }
 
