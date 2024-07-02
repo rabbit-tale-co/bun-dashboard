@@ -31,7 +31,7 @@
             </div>
           </div>
         </div>
-        <div class="lg:hidden grid grid-cols-2 gap-8">
+        <div class="lg:hidden grid md:grid-cols-2 gap-8">
           <div v-if="isLoading" v-for="i in usersPerPage" :key="i" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
             <p :class="getRankClass((currentPage - 1) * usersPerPage + i)">
               #0
