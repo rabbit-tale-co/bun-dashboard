@@ -9,15 +9,15 @@ export const buttonVariants = cva(
 			variant: {
 				default: 'bg-primary text-primary-foreground hover:bg-primary/90',
 				accent:
-					'bg-accent-foreground text-accent hover:bg-accent/90',
+					'bg-primary/[0.12] text-primary hover:bg-primary/[0.24]',
 				premium:'bg-premium text-premium-foreground dark:bg-premium/[0.12] dark:text-premium dark:hover:bg-premium/[0.24] hover:bg-premium/90',
 				destructive:
 					'bg-destructive text-destructive-foreground hover:bg-destructive/90',
 				outline:
-					'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+					'border border-primary bg-background text-primary hover:bg-primary hover:text-primary-foreground',
 				secondary:
-					'bg-secondary/60 text-secondary-foreground dark:hover:bg-secondary/80',
-				ghost: 'hover:bg-secondary hover:text-secondary-foreground',
+					'bg-secondary/50 text-secondary-foreground dark:hover:bg-secondary/60',
+				ghost: 'hover:bg-secondary/50 hover:text-secondary-foreground',
 				link: 'text-primary underline-offset-4 hover:underline',
 			},
 			size: {
