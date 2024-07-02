@@ -1,52 +1,83 @@
 <template>
    <div class="flex min-h-screen w-full">
       <aside class="fixed top-0 left-0 h-full md:w-24 lg:w-80 hidden md:flex flex-col">
-         <div class="flex h-20 items-center px-4 lg:px-6 relative">
+         <div class="flex h-20 items-center px-4 lg:px-8 relative">
             <!-- <span class="absolute -right-2 -bottom-2 size-2 rounded-tl-lg bg-[#2e3038]"></span> -->
             <!-- border-b -->
             <router-link
                to="/"
-               class="flex items-center gap-2 max-lg:ml-4 lg:-ml-2 font-semibold"
+               class="flex items-center gap-2 max-lg:ml-4 font-semibold"
             >
                <Logo class="size-8 mr-2"/>
-               <span class="whitespace-nowrap max-lg:hidden">Tiny Rabbit Bot <Badge variant="outline">alpha</Badge></span>
+               <span class="whitespace-nowrap text-2xl flex items-center max-lg:hidden">Tiny Rabbit</span>
             </router-link>
+            <Badge variant="outline" class="ml-3 max-lg:hidden">alpha</Badge>
          </div>
-         <div class="flex-1 overflow-y-auto max-lg:ml-4 mt-6">
-            <nav class="grid items-start px-2 text-sm font-medium lg:px-3">
+         <div class="flex-1 overflow-y-auto max-lg:ml-5 mt-6">
+            <nav class="grid items-start lg:px-5 max-lg:w-14 text-sm font-medium mb-6">
                <ul class="flex flex-col space-y-2">
                   <li
-                     v-for="(item, i) in items"
+                     v-for="(route, i) in routes"
                      :key="i"
-                     @click="handleNavigation(item.path)"
+                     @click="handleNavigation(route.path)"
                      class="group hover:cursor-pointer rounded-full"
                   >
-                     <router-link
-                        :to="item.path"
-                        class="flex max-lg:size-12 items-center gap-3 rounded-lg px-3 py-3 text-muted-foreground transition-all hover:text-primary hover:bg-primary/[.12]"
-                        :class="{
-                           'bg-primary text-primary-foreground hover:text-primary-foreground hover:!bg-primary/90':
-                              isActive(item.path),
-                        }"
-                     >
-                        <component
-                           class="lg:mr-2"
-                           :is="
-                              isActive(item.path)
-                                 ? item.iconSolid
-                                 : item.iconOutline
-                           "
-                        />
-                        <span class="max-lg:hidden">{{ item.title }}</span>
-                     </router-link>
+                     <Button as-child class="w-full justify-start h-14 max-lg:size-14" :variant="isActive(route.path) ? 'secondary' : 'ghost'">
+                        <router-link
+                           :to="route.path"
+                        >
+                           <component
+                              class="lg:mr-2"
+                              :is="
+                                 isActive(route.path)
+                                    ? route.iconSolid
+                                    : route.iconOutline
+                              "
+                           />
+                           <span class="max-lg:hidden">{{ route.title }}</span>
+                        </router-link>
+                     </Button>
                   </li>
                </ul>
             </nav>
+            <div v-for="(items, category) in categorizedItems" :key="category">
+               <h4 class="lg:px-9 max-lg:hidden mb-4 text-xs text-muted-foreground font-bold uppercase">{{ category }}</h4>
+               <nav class="grid items-start lg:px-5 max-lg:w-14 text-sm font-medium mb-6">
+                  <ul class="flex flex-col space-y-2">
+                     <li
+                        v-for="(item, i) in items"
+                        :key="i"
+                        @click="handleNavigation(item.path)"
+                        class="group hover:cursor-pointer rounded-full"
+                     >
+                        <Button as-child class="w-full justify-start h-14 max-lg:size-14" :variant="isActive(item.path) ? 'secondary' : 'ghost'">
+                           <router-link
+                              :to="item.path"
+                           >
+                              <component
+                                 class="lg:mr-2"
+                                 :is="
+                                    isActive(item.path)
+                                       ? item.iconSolid
+                                       : item.iconOutline
+                                 "
+                              />
+                              <span class="max-lg:hidden">{{ item.title }}</span>
+                              <Badge v-if="item.premium" class="ml-auto p-1.5 max-lg:hidden" variant="premium">
+                                 <!-- <component size="20" :is="item.badge" /> -->
+                                  <SolidCarrot size="20" />
+                              </Badge>
+                           </router-link>
+                        </Button>
+                     </li>
+                  </ul>
+               </nav>
+            </div>
          </div>
       </aside>
       <main class="flex flex-1 flex-col md:ml-24 lg:ml-80 z-10">
          <header class="flex h-20 items-center gap-4 px-4 lg:px-6">
-            <span class="whitespace-nowrap max-md:hidden -translate-x-4 lg:hidden">Tiny Rabbit Bot <Badge variant="outline">alpha</Badge></span>
+            <span class="whitespace-nowrap max-md:hidden -translate-x-4 text-2xl flex items-center lg:hidden">Tiny Rabbit <Badge variant="outline" class="ml-3">alpha</Badge></span>
             <Sheet>
                <SheetTrigger as-child>
                   <Button
@@ -95,10 +126,10 @@
                </SheetContent>
             </Sheet>
             <nav class="ml-auto flex space-x-3 items-center">
-               <Button variant="premium" as-child class="mr-3" size="defaultIcon">
+               <Button variant="premium" as-child  size="defaultIcon">
                   <router-link to="#">
                      <SolidCarrot class="mr-2"/>
-                     Upgreade to Golden Carrot
+                     Upgreade to Premium
                   </router-link>
                </Button>
                <DropdownMenu>
@@ -145,7 +176,7 @@
          <main class="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-y-auto bg-backgroundSecondary md:rounded-tl-2xl">
             <router-view />
          </main>
-         <Footer class="max-w-full gap-4 p-4 lg:gap-6 lg:p-6 bg-backgroundSecondary justify-start [&>div]:max-w-full" />
+         <!-- <Footer class="max-w-full gap-4 p-4 lg:gap-6 lg:p-6 bg-backgroundSecondary justify-start [&>div]:max-w-full" /> -->
       </main>
    </div>
 </template>
@@ -176,10 +207,12 @@ import {
 	OutlineClearNight,
 	OutlineCommand,
 	OutlineGridThree,
+	OutlineSend,
 	OutlineSunny,
 	SolidCarrot,
 	SolidCommand,
 	SolidGridThree,
+   SolidSend,
 } from '@/components/ui/icons'
 
 import Footer from '@/components/Footer.vue'
@@ -191,6 +224,8 @@ import { useColorMode } from '@vueuse/core'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Logo } from '@/components/ui/icons'
+import { plugins, categorizedItems } from '@/lib/plugins'
+import { setGuildID } from '@/api/guildId'
 
 const route = useRoute()
 const router = useRouter()
@@ -205,7 +240,9 @@ const guildID = ref(
 	route.params.guildID || sessionStorage.getItem('guildID') || '',
 )
 
-const items = computed(() => [
+setGuildID(guildID.value)
+
+const routes = computed(() => [
 	{
 		path: `/manage/${guildID.value}`,
 		title: 'Dashboard',
