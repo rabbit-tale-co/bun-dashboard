@@ -1,37 +1,11 @@
 <template>
-  <header class="relative w-full border-b border-backgroundSecondary shadow-lg">
+  <header class="relative w-full bg-background border-b border-backgroundSecondary shadow-lg">
     <section class="flex items-center justify-between max-w-screen-xl px-6 mx-auto">
       <!-- Navigation for smaller screens -->
       <!-- Uncomment this section if needed -->
-      <Sheet>
-        <SheetTrigger as-child class="lg:hidden">
-          <Button variant="ghost" size="icon">
-            <OutlineHome />
-            <span class="sr-only">Menu</span>
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left">
-          <SheetHeader>
-            <SheetTitle>Navigation</SheetTitle>
-            <SheetDescription>Navigate through the sections</SheetDescription>
-          </SheetHeader>
-          <nav class="my-4">
-            <ul class="space-y-2">
-              <li v-for="(item, i) in items" :key="i" @click="handleNavigation(item.path)" class="group hover:cursor-pointer rounded-full">
-                <SheetClose as-child>
-                  <Button as-child variant="ghost" size="defaultIcon" class="justify-start">
-                    <router-link :to="item.path" v-if="!item.external" class="flex items-center">{{ item.title }}</router-link>
-                    <a v-else :href="item.path" :class="navigationMenuTriggerStyle()" target="_blank">{{ item.title }}</a>
-                  </Button>
-                </SheetClose>
-              </li>
-            </ul>
-          </nav>
-        </SheetContent>
-      </Sheet>
-
-      <router-link to="/" class="mr-4 max-lg:hidden">
-        <Logo size="40" />
+      <router-link to="/" class="mr-6 flex gap-3">
+        <Logo size="32" />
+        <h4 class="whitespace-nowrap text-xl font-bold flex items-center">Tiny Rabbit</h4>
       </router-link>
       <!-- Main Navigation Menu -->
       <ul class="flex items-center">
@@ -47,7 +21,7 @@
               <div v-for="(item, i) in dropdownItems" :key="i">
                   <h4 class="text-foreground text-sm">Category</h4>
                   <ul class="grid grid-cols-1 gap-6 mt-5 pl-2">
-                    <li v-for="(subitem, j) in item.subitems" :key="j">
+                    <li v-for="(subitem, j) in item.subitems" :key="j" >
                       <router-link v-if="!subitem.external" :to="subitem.path" class="block transition-colors text-sm text-foreground/40 hover:text-foreground/60">
                         <div class="flex gap-4">
                           <OutlineDiscord class="text-foreground"/>
@@ -119,13 +93,62 @@
 
       <!-- User Navigation -->
       <nav class="flex items-center space-x-3 ml-auto">
-        <Button variant="premium" as-child  size="defaultIcon">
+        <Button variant="premium" as-child  size="icon" class="lg:hidden">
+          <router-link to="#">
+            <OutlineCrown/>
+          </router-link>
+        </Button>
+        <Button variant="premium" as-child  size="defaultIcon" class="max-lg:hidden">
           <router-link to="#">
             <OutlineCrown class="mr-2"/>
             Premium
           </router-link>
         </Button>
-        <Button as-child size="defaultIcon" v-if="!user">
+        <Sheet>
+          <SheetTrigger as-child class="lg:hidden">
+            <Button variant="ghost" size="icon">
+              <OutlineMenu />
+              <span class="sr-only">Menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" class="flex flex-col">
+            <SheetHeader class="items-start">
+              <div class="flex-1">
+                <router-link to="/" class="mr-4 flex gap-3">
+                  <Logo size="32" />
+                  <h4 class="whitespace-nowrap text-xl font-bold flex items-center">Tiny Rabbit</h4>
+                </router-link>
+              </div>
+              <SheetClose>
+                <Button variant="ghost" size="icon">
+                  <OutlineClose />
+                  <span class="sr-only">Close</span>
+                </Button>
+              </SheetClose>
+            </SheetHeader>
+            <nav class="my-4 flex-grow">
+              <ul class="space-y-2">
+                <li v-for="(item, i) in items" :key="i" @click="handleNavigation(item.path)" class="group hover:cursor-pointer rounded-full">
+                  <SheetClose as-child>
+                    <Button as-child variant="ghost" size="defaultIcon" class="justify-start">
+                      <router-link :to="item.path" v-if="!item.external" class="flex items-center">{{ item.title }}</router-link>
+                      <a v-else :href="item.path" :class="navigationMenuTriggerStyle()" target="_blank">{{ item.title }}</a>
+                    </Button>
+                  </SheetClose>
+                </li>
+              </ul>
+            </nav>
+            <SheetFooter class="mt-auto">
+              <Button as-child size="defaultIcon" v-if="!user">
+                <a href="https://api.rabbittale.co/login">
+                  <SolidDiscord class="mr-2" />
+                  Login with Discord
+                </a>
+              </Button>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
+        <Button as-child size="defaultIcon" v-if="!user" class="max-lg:hidden">
           <a href="https://api.rabbittale.co/login">
             <SolidDiscord class="mr-2" />
             Login with Discord
@@ -137,7 +160,7 @@
               <AvatarImage :src="user.avatarUrl" :alt="user.username" />
               <AvatarFallback>{{ avatarFallbackText }}</AvatarFallback>
             </Avatar>
-            {{ user.globalName }}
+            <span class="max-lg:hidden">{{ user.globalName }}</span>
             <OutlineChevronRight size="16" class="rotate-90 transition-transform" />
           </PopoverTrigger>
           <PopoverContent sideOffset="1" align="end" class="w-52 p-2 rounded-xl space-y-2">
@@ -173,11 +196,13 @@ import {
 	OutlineClearNight,
 	SolidDiscord,
 	OutlineHome,
-  OutlineChevronRight,
-  OutlineDiscord,
-  SolidCarrot,
-  OutlineCarrot,
-  OutlineCrown,
+	OutlineChevronRight,
+	OutlineDiscord,
+	SolidCarrot,
+	OutlineCarrot,
+	OutlineCrown,
+	OutlineMenu,
+	OutlineClose,
 } from '@/components/ui/icons'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -198,6 +223,7 @@ import {
 	SheetClose,
 	SheetContent,
 	SheetDescription,
+	SheetFooter,
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
@@ -207,9 +233,15 @@ import { useAuth } from '@/utils/auth'
 import { useRouter } from 'vue-router'
 import { cn } from '@/lib/utils'
 import { Logo } from '@/components/ui/icons'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from './ui/dropdown-menu'
+import {
+	DropdownMenu,
+	DropdownMenuTrigger,
+	DropdownMenuContent,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuItem,
+} from './ui/dropdown-menu'
 import { AspectRatio } from './ui/aspect-ratio'
-
 
 const items = [
 	{
@@ -219,8 +251,8 @@ const items = [
 		iconOutline: OutlineHome,
 	},
 	{
-		path: '/public-servers',
-		title: 'Public Servers',
+		path: '/dashbaord',
+		title: 'My Servers',
 		iconSolid: SolidHome,
 		iconOutline: OutlineHome,
 	},
@@ -231,38 +263,38 @@ const items = [
 		iconOutline: OutlineHome,
 		external: true,
 	},
-	{
-		path: '/help',
-		title: 'Help',
-		iconSolid: SolidHome,
-		iconOutline: OutlineHome,
-	},
-	{
-		path: '/status',
-		title: 'Status',
-		iconSolid: SolidHome,
-		iconOutline: OutlineHome,
-	},
+	// {
+	// 	path: '/help',
+	// 	title: 'Help',
+	// 	iconSolid: SolidHome,
+	// 	iconOutline: OutlineHome,
+	// },
+	// {
+	// 	path: '/status',
+	// 	title: 'Status',
+	// 	iconSolid: SolidHome,
+	// 	iconOutline: OutlineHome,
+	// },
 ]
 
 const dropdownItems = [
-  {
-    title: 'Moderation & Server Management',
-    subitems: [
-      { path: '/welcome-plugin', title: 'Welcome Plugin', external: false },
-      { path: '/custom-commands', title: 'Custom Commands', external: false },
-      { path: '/reaction-roles', title: 'Reaction Roles', external: false },
-      { path: '/moderator', title: 'Moderator', external: false },
-    ],
-  },
-  {
-    title: 'Utilities',
-    subitems: [
-      { path: '/embeds', title: 'Embeds', external: false },
-      { path: '/search-anything', title: 'Search Anything', external: false },
-      { path: '/record', title: 'Record', external: false },
-    ],
-  },
+	{
+		title: 'Moderation & Server Management',
+		subitems: [
+			{ path: '/welcome-plugin', title: 'Welcome Plugin', external: false },
+			{ path: '/custom-commands', title: 'Custom Commands', external: false },
+			{ path: '/reaction-roles', title: 'Reaction Roles', external: false },
+			{ path: '/moderator', title: 'Moderator', external: false },
+		],
+	},
+	{
+		title: 'Utilities',
+		subitems: [
+			{ path: '/embeds', title: 'Embeds', external: false },
+			{ path: '/search-anything', title: 'Search Anything', external: false },
+			{ path: '/record', title: 'Record', external: false },
+		],
+	},
 ]
 
 const { user, checkCallback, checkSessionStorage, logout } = useAuth()
@@ -291,7 +323,7 @@ const avatarFallbackText = computed(() => {
 const isMenuOpen = ref(false)
 
 const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value
+	isMenuOpen.value = !isMenuOpen.value
 }
 
 const handleNavigation = (path) => {
