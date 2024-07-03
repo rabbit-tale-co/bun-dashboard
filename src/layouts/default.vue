@@ -7,8 +7,6 @@ import Footer from '@/components/Footer.vue'
 <template>
       <!-- <Sidebar /> -->
       <Header class="py-5" />
-      <section class="flex-grow h-full bg-backgroundSecondary">
-            <router-view />
-      </section>
-      <Footer class="flex-shrink-0 py-10" />
+      <router-view />
+      <Footer class="mt-auto py-10" />
 </template>

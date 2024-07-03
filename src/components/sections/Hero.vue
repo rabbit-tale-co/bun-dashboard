@@ -28,7 +28,7 @@
                </Button>
                </div>
             </div>
-            <div class="h-full lg:w-1/2 translate-x-6 translate-y-6 g:translate-y-0 lg:translate-x-0 lg:absolute lg:right-40 -scale-x-[1] bottom-[16.5rem] flex items-end justify-start pointer-events-none -z-10">
+            <div class="h-full lg:w-1/2 translate-x-6 translate-y-6 ;g:translate-y-0 lg:translate-x-0 lg:absolute lg:right-40 -scale-x-[1] bottom-[16.5rem] flex items-end justify-start pointer-events-none -z-10">
                <img src="@/assets/rabbit_tale_logo.svg" class="w-80" alt="">
             </div>
          </div>
