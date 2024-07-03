@@ -1,5 +1,5 @@
 <template>
-   <section class="w-full relative z-10 min-h-[calc(100vh-20%)] flex">
+   <section class="w-full relative z-10 lg:min-h-[calc(100vh-20%)] flex">
       <!-- <div class="absolute w-full h-full -z-10 bottom-0 left-0 pointer-events-none overflow-hidden">
          <img src="@/assets/hero.png" alt="Tiny Rabbit Bot Logo" class="w-full absolute bottom-0" />
       </div> -->
@@ -28,7 +28,7 @@
                </Button>
                </div>
             </div>
-            <div class="h-full lg:w-1/2 translate-x-16 translate-y-4 lg:translate-y-0 lg:translate-x-0 lg:absolute lg:right-40 -scale-x-[1] bottom-[16.5rem] flex items-end justify-start pointer-events-none -z-10">
+            <div class="h-full lg:w-1/2 md:translate-x-16 translate-y-4 lg:translate-y-0 lg:translate-x-0 lg:absolute lg:right-40 -scale-x-[1] bottom-[16.5rem] flex items-end justify-start pointer-events-none -z-10">
                <img src="@/assets/rabbit_tale_logo.svg" alt="Rabbit Tale Logo">
             </div>
          </div>
