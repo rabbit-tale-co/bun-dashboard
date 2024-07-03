@@ -81,6 +81,7 @@ const rabbitClass = computed(() =>
                   as-child
                   variant="link"
                   size="link"
+                  class="relative"
                >
                   <div class="relative inline-flex">
                      <div :class="cn('size-2 mx-2 rounded-full', statusIndicator)" />
