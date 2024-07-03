@@ -1,10 +1,10 @@
 <template>
    <section class="w-full relative z-10 min-h-[calc(100vh-20%)] flex">
-      <div class="absolute w-full h-full -z-10 bottom-0 left-0 pointer-events-none overflow-hidden">
-      <!-- <img src="../assets/hero.png" alt="Tiny Rabbit Bot Logo" class="w-full absolute bottom-0" /> -->
-      </div>
+      <!-- <div class="absolute w-full h-full -z-10 bottom-0 left-0 pointer-events-none overflow-hidden">
+         <img src="@/assets/hero.png" alt="Tiny Rabbit Bot Logo" class="w-full absolute bottom-0" />
+      </div> -->
       <div class="min-h-full w-full flex items-center justify-start">
-         <div class="mx-auto w-full max-w-screen-xl px-6 lg:px-10 py-6 pt-10 lg:pt-24 lg:py-36">
+         <div class="lg:mx-auto w-full max-w-screen-xl p-6 lg:px-10 pt-10 lg:pt-24 lg:py-36">
             <div class="w-full text-center md:w-3/5 md:mx-auto lg:mx-0 lg:text-left lg:w-2/5">
                <h1 class="text-white font-bold text-5xl leading-tight">
                The best <br>
