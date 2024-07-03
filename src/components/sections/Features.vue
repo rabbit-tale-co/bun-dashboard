@@ -8,7 +8,7 @@
       <img :src="imageSrc" class="w-full max-w-[560px] rounded-2xl" alt="">
     </div>
     <div :class="
-      cn('col-span-3 flex flex-col justify-center items-start text-center lg:text-left', {
+      cn('col-span-4 lg:col-span-3 flex flex-col justify-center items-start text-center lg:text-left', {
         'lg:order-first': props.reverse
       })"
     >
