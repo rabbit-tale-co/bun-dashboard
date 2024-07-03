@@ -1,5 +1,5 @@
 <template>
-   <div class="flex min-h-screen w-full">
+   <div class="flex min-h-screen w-full bg-background">
       <aside class="fixed top-0 left-0 h-full md:w-24 lg:w-80 hidden md:flex flex-col">
          <div class="flex h-20 items-center px-4 lg:px-8 relative">
             <!-- <span class="absolute -right-2 -bottom-2 size-2 rounded-tl-lg bg-[#2e3038]"></span> -->

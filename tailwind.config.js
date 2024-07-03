@@ -21,9 +21,6 @@ module.exports = {
          },
       },
       extend: {
-         minHeight: {
-            'screen-20': 'calc(100vh - 20%)'
-          },
          colors: {
             border: 'hsla(var(--border))',
             scrollbar: {

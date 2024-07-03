@@ -29,7 +29,7 @@
             </div>
           </div>
         </div>
-        <div class="lg:hidden grid md:grid-cols-2 gap-8">
+        <div class="lg:hidden grid md:grid-cols-1 gap-8">
           <div v-if="isLoading" v-for="i in usersPerPage" :key="i" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
             <p>#0</p>
             <Skeleton class="size-12 rounded-full ml-4 bg-white/10" />
