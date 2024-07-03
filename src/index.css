@@ -141,7 +141,7 @@
    }
 
    #app {
-      @apply h-full w-full flex flex-col;
+      @apply min-h-screen w-full flex flex-col;
    }
 }
 
