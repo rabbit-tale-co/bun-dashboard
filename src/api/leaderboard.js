@@ -49,7 +49,7 @@ const fetchGlobalLeaderboardData = async (page = 1, limit = 25) => {
 			throw new Error('Failed to fetch global leaderboard')
 		}
 		const leaderboardData = await response.json()
-		await setCache(cacheKey, leaderboardData, 3600) // Cache for 1 hour
+		await setCache(cacheKey, leaderboardData, 900)
 		return leaderboardData
 	} catch (err) {
 		error.value = err.message
