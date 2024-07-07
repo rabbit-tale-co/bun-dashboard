@@ -1,17 +1,18 @@
 <script setup>
 import { onMounted, computed } from 'vue';
-import { useAuth } from '@/utils/auth';
+import useAuth from '@/utils/auth';
 import { toast } from 'vue-sonner';
 import { useRouter } from 'vue-router';
-import { useGuilds } from '@/utils/guilds';
+import { useGuilds } from '@/api/guilds';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const { guilds, fetchGuilds, guildIsPending, guildError } = useGuilds();
-const { user, isAuthenticated, checkCallback, checkSessionStorage } = useAuth();
 
 const router = useRouter();
 const accessToken = sessionStorage.getItem('access_token');
+
+const { guilds, isPending: guildIsPending, error: guildError } = useGuilds(accessToken);
+const { user, isAuthenticated, checkCallback, checkSession } = useAuth();
 
 const handleGuildClick = async (guild) => {
   if (!guild.isAdmin) {
@@ -27,12 +28,10 @@ const handleGuildClick = async (guild) => {
   window.location.href = `/manage/${guild.id}`;
 };
 
+
 onMounted(() => {
-  if (accessToken) {
-    fetchGuilds(accessToken);
-  }
   checkCallback();
-  checkSessionStorage();
+  checkSession();
 
   if (!isAuthenticated.value) {
     router.push('/');
@@ -43,21 +42,15 @@ const loading = computed(() => guildIsPending.value || !accessToken);
 const error = computed(() => guildError.value);
 
 // Filter the guilds to only include those where the user is an admin
-const adminGuilds = computed(() => guilds.value.filter(guild => guild.isAdmin));
+const adminGuilds = computed(() => guilds.value ? guilds.value.filter(guild => guild.isAdmin) : []);
 </script>
 
 <template>
-  <section v-if="!accessToken">
-    <article>
-      <h1>You must be logged in to view servers.</h1>
-    </article>
+  <section v-if="!accessToken" class="mt-10 mx-auto px-10 flex flex-col items-center relative w-[min(100%,_948px)]">
+    <h1 class="text-4xl font-bold text-white mb-4">You must be logged in to view servers.</h1>
   </section>
   <section v-else class="mt-10 mx-auto px-10 flex flex-col items-center relative w-[min(100%,_948px)]">
     <h1 class="text-4xl font-bold text-white mb-4">Select a server</h1>
-    <!-- <p class="leading-3">
-         Servers you're in ({{ guilds.length }}
-         {{ guilds.length > 1 ? 'servers' : 'server' }})
-      </p> -->
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full my-10">
       <article
         v-for="guild in adminGuilds"

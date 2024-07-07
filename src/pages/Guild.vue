@@ -196,7 +196,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useAuth } from '@/utils/auth'
+import useAuth from '@/utils/auth'
 import { useGuildData } from '@/hooks/useGuildData'
 import WelcomeFormEasy from '@/components/WelcomeFormEasy.vue'
 import {
@@ -218,7 +218,7 @@ import { plugins } from '@/lib/plugins'
 
 const router = useRouter()
 
-const { isAuthenticated, checkSessionStorage } = useAuth()
+const { isAuthenticated, checkSession } = useAuth()
 const { guild, roles, channels, loading, error } = useGuildData()
 
 const getRoleStyle = (role) => {
@@ -242,7 +242,7 @@ const copyServerID = async (id) => {
 }
 
 onMounted(async () => {
-	checkSessionStorage()
+	checkSession()
 	if (!isAuthenticated.value) {
 		router.push('/')
 		return
