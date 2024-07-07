@@ -83,8 +83,11 @@
       --accent: 215 27.9% 16.9%;
       --accent-foreground: 210 20% 98%;
 
-      --premium: 45 100% 80%;
-      --premium-foreground: 45 100% 30%;
+      --premium: 35 99% 73%;
+      --premium-foreground: 35 99% 73%;
+
+      --premium-secondary: 18, 81%, 15%;
+      --premium-secondary-foreground: 35, 99%, 73%;
 
       --destructive: 0 62.8% 30.6%;
       --destructive-foreground: 210 20% 98%;
