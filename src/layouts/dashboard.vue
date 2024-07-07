@@ -75,7 +75,7 @@
             </div>
          </div>
       </aside>
-      <main class="flex flex-1 flex-col md:ml-24 lg:ml-80 z-10">
+      <main class="flex flex-1 h-full flex-col md:ml-24 lg:ml-80 z-10">
          <header class="flex h-20 items-center gap-4 px-4 lg:px-6">
             <span class="whitespace-nowrap max-md:hidden -translate-x-4 text-2xl flex items-center lg:hidden">Tiny Rabbit <Badge variant="outline" class="ml-3">alpha</Badge></span>
             <Sheet>
@@ -129,7 +129,7 @@
                <Button variant="premium" as-child  size="defaultIcon">
                   <router-link to="#">
                      <SolidCarrot class="mr-2"/>
-                     Upgreade to Premium
+                     Golden Carrot
                   </router-link>
                </Button>
                <DropdownMenu>
@@ -156,7 +156,7 @@
                      <DropdownMenuItem>Logout</DropdownMenuItem>
                   </DropdownMenuContent>
                </DropdownMenu>
-               <Button variant="ghost" size="icon" @click="toggleTheme">
+               <!-- <Button variant="ghost" size="icon" @click="toggleTheme">
                   <OutlineClearNight
                      :class="[
                         'absolute rotate-0 scale-100 transition-all',
@@ -170,7 +170,7 @@
                      ]"
                   />
                   <span class="sr-only">Toggle theme</span>
-               </Button>
+               </Button> -->
             </nav>
          </header>
          <main class="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-y-auto bg-backgroundSecondary md:rounded-tl-2xl">
@@ -216,7 +216,7 @@ import {
 } from '@/components/ui/icons'
 
 import Footer from '@/components/Footer.vue'
-import { useAuth } from '@/utils/auth'
+import useAuth from '@/utils/auth'
 import Avatar from '@/components/ui/avatar/Avatar.vue'
 import AvatarImage from '@/components/ui/avatar/AvatarImage.vue'
 import AvatarFallback from '@/components/ui/avatar/AvatarFallback.vue'
@@ -269,16 +269,16 @@ const handleNavigation = (path) => {
 
 const { user, checkCallback, checkSessionStorage, logout } = useAuth()
 
-const colorMode = useColorMode()
-const isDark = ref(colorMode.value === 'dark')
+// const colorMode = useColorMode()
+// const isDark = ref(colorMode.value === 'dark')
 
-const toggleTheme = () => {
-	colorMode.value = colorMode.value === 'dark' ? 'light' : 'dark'
-}
+// const toggleTheme = () => {
+// 	colorMode.value = colorMode.value === 'dark' ? 'light' : 'dark'
+// }
 
-watch(colorMode, (newMode) => {
-	isDark.value = newMode === 'dark'
-})
+// watch(colorMode, (newMode) => {
+// 	isDark.value = newMode === 'dark'
+// })
 
 onMounted(() => {
 	if (guildID.value) {
