@@ -9,6 +9,8 @@ import ServerCard from '@/components/sections/ServerCrad.vue'
 import Features from '@/components/sections/Features.vue'
 import Statistics from '@/components/sections/Statistics.vue'
 import LeaderBoard from '@/components/sections/Leaderboard.vue'
+import LeaderboardSkeletonCard from '@/components/sections/LeaderboardSkeletonCard.vue'
+import LeaderboardCard from './components/sections/LeaderboardCard.vue'
 
 
 createApp(App)
@@ -18,5 +20,7 @@ createApp(App)
 .component('Features', Features)
 .component('Statistics', Statistics)
 .component('Leaderboard', LeaderBoard)
+.component('LeaderboardSkeletonCard', LeaderboardSkeletonCard)
+.component('LeaderboardCard', LeaderboardCard)
 .use(router)
 .mount('#app')
