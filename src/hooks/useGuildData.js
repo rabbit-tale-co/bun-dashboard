@@ -5,7 +5,7 @@ import {
 	loading,
 	error,
 } from '@/api/guildData'
-import { setCache, getCache } from '@/utils/cache'
+import { setCache, getCache } from '@/storage/localStorage'
 
 const guild = ref(null)
 const roles = ref([])
@@ -17,7 +17,7 @@ const fetchGuildDetails = async (guildId) => {
 		guild.value = cachedGuild
 		roles.value = cachedGuild.roles || []
 		channels.value = cachedGuild.channels || [] // Add this line
-		console.log('Loaded guild data from cache:', cachedGuild)
+		//console.log('Loaded guild data from cache:', cachedGuild)
 		return
 	}
 
@@ -35,7 +35,7 @@ const fetchGuildDetails = async (guildId) => {
 		roles.value = data.roles
 		channels.value = data.channels // Add this line
 		setCache(`guild_${guildId}`, guild.value, 3600) // Cache for 1 hour
-		console.log('Fetched guild data from API:', guild.value)
+		//console.log('Fetched guild data from API:', guild.value)
 	} catch (err) {
 		console.error('Error fetching guild details:', err)
 	}
