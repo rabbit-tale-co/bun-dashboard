@@ -2,60 +2,20 @@
 import { OutlineDiscord } from '@/components/ui/icons'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { onMounted, ref, computed, onUnmounted, watch } from 'vue'
+import { onMounted, ref, computed, onUnmounted, watch, watchEffect } from 'vue'
 import { cn } from '@/lib/utils'
-import { fetchBotStatusData } from '@/api/botStatus'
+import { fetchBotStatusData, useBotStatus } from '@/api/botStatus'
 import { Logo } from '@/components/ui/icons'
 
-const status = ref('online')
-const version = ref('NaN')
-const timer = ref(0)
+const { data: botStatusData, error, isValidating } = useBotStatus()
 
-const checkBotStatus = async () => {
-	try {
-		const result = await fetchBotStatusData()
-		status.value = result.status
-		version.value = result.version
-		//TODO: upgrade to fetch all services status data
-	} catch (err) {
-		console.error(err)
-		// Handle the case where fetching bot status fails
-		status.value = 'offline'
-		version.value = 'unknown'
-	}
-}
+const status = computed(() => botStatusData?.value?.status ?? 'offline')
+const version = computed(() => botStatusData?.value?.version ?? 'unknown')
 
-watch(timer, () => {
-	checkBotStatus()
-})
-
-onMounted(() => {
-	// Fetch the status immediately when the component is mounted
-	checkBotStatus()
-
-	// Set up the interval to update the timer every 15 seconds
-	const intervalId = setInterval(() => {
-		timer.value++
-	}, 15000)
-
-	// Clear the interval when the component is unmounted
-	onUnmounted(() => {
-		clearInterval(intervalId)
-	})
-})
-
-const statusIndicator = computed(() =>
-	status.value === 'online' ? 'bg-primary' : 'bg-destructive',
-)
-const statusLink = computed(() =>
-	status.value === 'online' ? 'text-primary' : 'text-destructive',
-)
-const statusText = computed(() =>
-	status.value === 'online' ? 'Rabbit Still Jumping' : 'Rabbit stopped jumping',
-)
-const rabbitClass = computed(() =>
-    status.value === 'online' ? 'inline-block animate-bounce mr-2' : '',
-)
+const statusIndicator = computed(() => status.value === 'online' ? 'bg-primary' : 'bg-destructive')
+const statusLink = computed(() => status.value === 'online' ? 'text-primary' : 'text-destructive')
+const statusText = computed(() => status.value === 'online' ? 'Rabbit Still Jumping' : 'Rabbit stopped jumping')
+const rabbitClass = computed(() => status.value === 'online' ? 'inline-block animate-bounce mr-2' : '')
 </script>
 
 <template>
