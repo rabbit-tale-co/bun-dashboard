@@ -5,55 +5,22 @@
       <h2 class="text-white mx-auto max-w-xl font-bold text-4xl leading-relaxed">Top 3 Leaderboard</h2>
       <h3 class="font-bold text-xl leading-tight">Tracked Over {{ formattedTotalXP }} XP</h3>
       <main class="mt-12">
+        <div v-if="error" class="text-red-500">{{ error.message || 'Failed to fetch leaderboard' }}</div>
         <div class="hidden lg:grid grid-cols-3 gap-8">
-          <div v-if="isLoading" v-for="i in usersPerPage" :key="i" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
-            <p>#0</p>
-            <Skeleton class="size-12 rounded-full ml-4 bg-white/10" />
-            <div class="ml-4 text-left text-base flex flex-1 flex-col">
-              <Skeleton class="w-3/4 h-5 mb-2 bg-white/10" />
-              <Skeleton class="w-1/2 h-4 bg-white/10" />
-            </div>
-          </div>
-          <div v-else v-for="(user, index) in topUsers" :key="user.userId" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
-            <p :class="getRankClass((currentPage - 1) * usersPerPage + index)">
-              #{{ (currentPage - 1) * usersPerPage + index + 1 }}
-            </p>
-            <img :src="user.avatarUrl" class="size-12 rounded-full ml-4" :alt="user.username">
-            <div class="ml-4 text-left text-base">
-              <div class="flex items-start justify-start text-white">
-                <p class="font-bold line-clamp-1">{{ user.globalName }}</p>
-              </div>
-              <div class="flex items-center justify-start text-muted-foreground">
-                <p class="text-base">{{ commaFormatter.format(user.xp) }} XP</p>
-              </div>
-            </div>
-          </div>
+          <LeaderboardSkeletonCard v-for="i in usersPerPage" :key="i" v-if="isValidating" />
+          <LeaderboardCard v-for="(user, index) in topUsers" :key="user.userId" :user="user" :index="index" :current-page="page" :users-per-page="limit" v-else />
         </div>
         <div class="lg:hidden grid md:grid-cols-1 gap-8">
-          <div v-if="isLoading" v-for="i in usersPerPage" :key="i" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
-            <p>#0</p>
-            <Skeleton class="size-12 rounded-full ml-4 bg-white/10" />
-            <div class="ml-4 text-left text-base flex flex-1 flex-col">
-              <Skeleton class="w-3/4 h-5 mb-2 bg-white/10" />
-              <Skeleton class="w-1/2 h-4 bg-white/10" />
-            </div>
-          </div>
-          <div v-else v-for="(user, index) in topUsers" :key="user.userId" class="bg-card-hover rounded-lg px-6 py-5 flex items-center justify-start h-24 overflow-x-hidden">
-            <p :class="getRankClass((currentPage - 1) * usersPerPage + index)">
-              #{{ (currentPage - 1) * usersPerPage + index + 1 }}
-            </p>
-            <img :src="user.avatarUrl" class="size-12 rounded-full ml-4" :alt="user.username">
-            <div class="ml-4 text-left text-base">
-              <div class="flex items-start justify-start text-white">
-                <p class="font-bold line-clamp-1">{{ user.globalName }}</p>
-              </div>
-              <div class="flex items-center justify-start text-muted-foreground">
-                <p class="text-base">{{ commaFormatter.format(user.xp) }} XP</p>
-              </div>
-            </div>
-          </div>
+          <LeaderboardSkeletonCard v-for="i in usersPerPage" :key="i" v-if="isValidating" />
+          <LeaderboardCard v-for="(user, index) in topUsers" :key="user.userId" :user="user" :index="index" :current-page="page" :users-per-page="limit" v-else />
         </div>
-        <!-- <div class="mt-6 flex justify-center gap-4">
+      </main>
+      <!-- <main class="mt-12">
+        <div class="hidden lg:grid grid-cols-3 gap-8">
+          <SkeletonCard v-for="i in usersPerPage" :key="i" v-if="isLoading" />
+          <LeaderboardCard v-for="(user, index) in topUsers" :key="user.userId" :user="user" :index="index" :current-page="currentPage" :users-per-page="usersPerPage" v-else />
+        </div>
+        <div class="mt-6 flex justify-center gap-4">
           <Pagination v-if="totalPages > 1" v-slot="{ page }" :total="(totalPages * usersPerPage)" :sibling-count="1" v-model:page="currentPage" :items-per-page="usersPerPage">
             <PaginationList v-slot="{ items }" class="flex items-center gap-1">
               <PaginationFirst />
@@ -72,14 +39,14 @@
               <PaginationLast />
             </PaginationList>
           </Pagination>
-        </div> -->
-      </main>
+        </div>
+      </main> -->
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed, watch, watchEffect } from 'vue';
 import { useLeaderboard } from '@/api/leaderboard';
 import { commaFormatter } from '@/utils/formatter';
 import { Button } from '@/components/ui/button';
@@ -95,54 +62,34 @@ import {
 } from '@/components/ui/pagination';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchTotalXPData } from '@/api/totalXP';
+import { SolidCrown } from '../ui/icons'
 
-const { fetchGlobalLeaderboardData, isPending, error } = useLeaderboard();
-const topUsers = ref([]);
-const totalXP = ref(0);
-const formattedTotalXP = computed(() => commaFormatter.format(totalXP.value));
+const page = ref(1)
+const limit = ref(3)
+const { leaderboard, error, isValidating } = useLeaderboard(page.value, limit.value)
+const topUsers = ref([])
+const totalXP = ref(0)
+const formattedTotalXP = computed(() => commaFormatter.format(totalXP.value))
+const totalPages = ref(0)
 
-const currentPage = ref(1);
-const usersPerPage = ref(3); // Set the number of users per page as a ref
+const processLeaderboardData = (data) => {
+  // console.log('Processing data:', data)
+  topUsers.value = data.leaderboard || []
+  totalXP.value = data.totalXp || 0
+  totalPages.value = Math.ceil((data.totalUsers || 0) / limit.value)
+  // console.log('topUsers:', topUsers.value)
+  // console.log('totalXP:', totalXP.value)
+  // console.log('totalPages:', totalPages.value)
+}
 
-const totalPages = ref(0);
-const isLoading = ref(false);
-
-const fetchLeaderboard = async (page, limit) => {
-  isLoading.value = true;
-  error.value = null;
-  try {
-    const { leaderboard, totalUsers, totalXp } = await fetchGlobalLeaderboardData(
-      page,
-      limit,
-    );
-    totalXP.value = totalXp;
-    topUsers.value = leaderboard;
-    totalPages.value = Math.ceil(totalUsers / limit);
-  } catch (err) {
-    error.value = err.message;
-    console.error('Error fetching leaderboard:', err);
-  } finally {
-    isLoading.value = false;
+watchEffect(() => {
+  //console.log('watchEffect triggered')
+  if (leaderboard.value) {
+    // console.log('leaderboard.value:', leaderboard.value)
+    processLeaderboardData(leaderboard.value)
   }
-};
-
-const getRankClass = (rank) => {
-  if (rank === 0) return 'text-[#ffd700]';
-  if (rank === 1) return 'text-[#c0c0c0]';
-  if (rank === 2) return 'text-[#cd7f32]';
-  return 'text-white/30';
-};
-
-const refreshData = async () => {
-  await fetchLeaderboard(currentPage.value, usersPerPage.value);
-};
-
-onMounted(async () => {
-  await refreshData(); // Initial load
-  const intervalId = setInterval(refreshData, 15 * 60 * 1000); // Refresh every 15 minutes
-});
-
-watch(currentPage, async (newPage) => {
-  await fetchLeaderboard(newPage, usersPerPage.value);
-});
+  if (error.value) {
+    console.error('Error fetching leaderboard:', error.value)
+  }
+})
 </script>
