@@ -4,7 +4,7 @@
          <img src="@/assets/hero.png" alt="Tiny Rabbit Bot Logo" class="w-full absolute bottom-0" />
       </div> -->
       <div class="h-full w-full flex items-center justify-start">
-         <div class="lg:mx-auto w-full max-w-screen-xl p-6 lg:px-10 pt-10 lg:pt-24 lg:py-36">
+         <div class="lg:mx-auto w-full max-w-screen-xl lg:flex lg:justify-between lg:items-end p-6 lg:px-10 pt-10 lg:pt-24 lg:py-36">
             <div class="w-full text-center md:w-3/5 md:mx-auto lg:mx-0 lg:text-left lg:w-2/5">
                <h1 class="text-white font-bold text-5xl leading-tight">
                The best <br>
@@ -28,9 +28,14 @@
                </Button>
                </div>
             </div>
-            <div class="h-full lg:w-1/2 md:translate-x-16 translate-y-4 lg:translate-y-0 lg:translate-x-0 lg:absolute lg:right-40 -scale-x-[1] bottom-[16.5rem] flex items-end justify-start pointer-events-none -z-10">
+            <div class="h-full lg:w-fit translate-x-4 translate-y-4 lg:translate-y-0 lg:translate-x-0 -scale-x-[1] flex items-end justify-center pointer-events-none -z-10">
+               <!--  w-1/2 -->
                <img src="@/assets/rabbit_tale_logo.svg" alt="Rabbit Tale Logo">
             </div>
+            <!-- <div class="h-full lg:w-fit translate-x-4 translate-y-4 lg:translate-y-0 lg:translate-x-0 lg:absolute lg:right-72 -scale-x-[1] bottom-48 flex items-end justify-center pointer-events-none -z-10"> -->
+               <!--  w-1/2 -->
+               <!-- <img src="@/assets/rabbit_tale_logo.svg" alt="Rabbit Tale Logo"> -->
+            <!-- </div> -->
          </div>
       </div>
    </section>
