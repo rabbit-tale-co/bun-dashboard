@@ -5,7 +5,7 @@ const botGuilds = ref([]);
 
 const fetchBotGuilds = async () => {
     if (botGuilds.value.length > 0) return;
-    
+
     try {
         const guildsList = await fetchBotGuildsData();
         botGuilds.value = guildsList;
