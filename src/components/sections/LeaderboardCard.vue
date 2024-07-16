@@ -17,22 +17,22 @@
  </template>
  
  <script setup>
- import { computed } from 'vue'
- import { SolidCrown } from '@/components/ui/icons'
- import { commaFormatter } from '@/utils/formatter'
- 
- const props = defineProps({
-   user: Object,
-   index: Number,
-   currentPage: Number,
-   usersPerPage: Number
- })
- 
- const getRankClass = (rank) => {
-   if (rank === 0) return 'text-premium'
-   if (rank === 1) return 'text-[#c0c0c0]'
-   if (rank === 2) return 'text-[#cd7f32]'
-   return 'text-white/30'
- }
- </script>
+import { computed } from 'vue'
+import { SolidCrown } from '@/components/ui/icons'
+import { commaFormatter } from '@/utils/formatter'
+
+const props = defineProps({
+	user: Object,
+	index: Number,
+	currentPage: Number,
+	usersPerPage: Number,
+})
+
+const getRankClass = (rank) => {
+	if (rank === 0) return 'text-premium'
+	if (rank === 1) return 'text-[#c0c0c0]'
+	if (rank === 2) return 'text-[#cd7f32]'
+	return 'text-white/30'
+}
+</script>
  

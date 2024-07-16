@@ -162,13 +162,13 @@
 
       <!-- User Navigation -->
       <nav class="flex items-center space-x-3 ml-auto">
-        <Button variant="premium" as-child  size="icon" class="lg:hidden">
-          <router-link to="#">
+        <Button variant="premium_secondary" as-child  size="icon" class="lg:hidden">
+          <router-link to="premium">
             <SolidCarrot/>
           </router-link>
         </Button>
-        <Button variant="premium" as-child  size="defaultIcon" class="max-lg:hidden">
-          <router-link to="#">
+        <Button variant="premium_secondary" as-child  size="defaultIcon" class="max-lg:hidden">
+          <router-link to="premium">
             <SolidCarrot class="mr-2"/>
             Golden Carrot
           </router-link>

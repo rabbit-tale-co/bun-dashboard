@@ -75,7 +75,7 @@
       --input: 215 27.9% 16.9%;
 
       --primary: 232, 50%, 70%;
-      --primary-foreground: 210 20% 98%;
+      --primary-foreground: 210, 20%, 98%;
 
       /* --secondary: 215 27.9% 16.9%; */
       /* --secondary-foreground: 210 20% 98%; */
@@ -83,14 +83,20 @@
       --accent: 215 27.9% 16.9%;
       --accent-foreground: 210 20% 98%;
 
-      --premium: 35 99% 73%;
-      --premium-foreground: 35 99% 73%;
+      --premium: 35, 99%, 73%;
+      --premium-foreground: 13, 94%, 14%;
+
+      --success: 108, 56%, 65%;
+      --success-foreground: 111, 65%, 10%;
 
       --premium-secondary: 18, 81%, 15%;
       --premium-secondary-foreground: 35, 99%, 73%;
 
+      /* --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 20% 98%; */
+
       --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 210 20% 98%;
+      --destructive-foreground: 0 77% 68%;
 
       --ring: 263.4 70% 50.4%;
 
@@ -184,6 +190,10 @@ img.emoji ~ img.emoji {
 
 img.emoji:not(:last-of-type) {
    margin: 0 0.125em 0 0.1em;
+}
+
+.h-cap {
+   height: 1cap;
 }
 
 .fade {

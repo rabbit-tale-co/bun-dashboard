@@ -22,22 +22,27 @@ const fetchGlobalLeaderboardData = async (page = 1, limit = 25) => {
 
 	try {
 		//console.log(`Fetching leaderboard data for page ${page} and limit ${limit}`);
-		const response = await fetch(`https://api.rabbittale.co/api/leaderboard/getGlobal?page=${page}&limit=${limit}`);
+		const response = await fetch(
+			`https://api.rabbittale.co/api/leaderboard/getGlobal?page=${page}&limit=${limit}`,
+		)
 		if (!response.ok) {
-			 const errorText = await response.text();
-			 console.error('Failed to fetch leaderboard:', errorText);
-			 throw new Error('Failed to fetch global leaderboard');
+			const errorText = await response.text()
+			console.error('Failed to fetch leaderboard:', errorText)
+			throw new Error('Failed to fetch global leaderboard')
 		}
-		const leaderboardData = await response.json();
-		localStorage.setItem(cacheKey, JSON.stringify({
-			 data: leaderboardData,
-			 expiresAt: Date.now() + 15 * 60 * 1000 // 15 minutes in milliseconds
-		}));
-		return leaderboardData;
-  } catch (err) {
-		console.error('Error fetching global leaderboard data:', err);
-		throw err;
-  }
+		const leaderboardData = await response.json()
+		localStorage.setItem(
+			cacheKey,
+			JSON.stringify({
+				data: leaderboardData,
+				expiresAt: Date.now() + 15 * 60 * 1000, // 15 minutes in milliseconds
+			}),
+		)
+		return leaderboardData
+	} catch (err) {
+		console.error('Error fetching global leaderboard data:', err)
+		throw err
+	}
 }
 
 /**

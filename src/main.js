@@ -10,7 +10,7 @@ import Features from '@/components/sections/Features.vue'
 import Statistics from '@/components/sections/Statistics.vue'
 import LeaderBoard from '@/components/sections/Leaderboard.vue'
 import LeaderboardSkeletonCard from '@/components/sections/LeaderboardSkeletonCard.vue'
-import LeaderboardCard from './components/sections/LeaderboardCard.vue'
+import LeaderboardCard from '@/components/sections/LeaderboardCard.vue'
 
 
 createApp(App)

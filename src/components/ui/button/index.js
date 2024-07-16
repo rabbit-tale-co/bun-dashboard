@@ -10,7 +10,8 @@ export const buttonVariants = cva(
 				default: 'bg-primary text-primary-foreground hover:bg-primary/90',
 				accent:
 					'bg-primary/[0.12] text-primary hover:bg-primary/[0.24]',
-				premium:'bg-premium text-premium-foreground dark:bg-premium/[0.12] dark:text-premium dark:hover:bg-premium/[0.24] hover:bg-premium/90',
+				premium:'bg-premium text-premium-foreground hover:bg-premium/90',
+				premium_secondary:'bg-premium text-premium-foreground dark:bg-premium/[0.12] dark:text-premium dark:hover:bg-premium/[0.24] hover:bg-premium/90',
 				destructive:
 					'bg-destructive text-destructive-foreground hover:bg-destructive/90',
 				outline:
@@ -29,8 +30,8 @@ export const buttonVariants = cva(
 				xsIcon: 'h-7 pr-2 pl-1',
 				sm: 'h-9 rounded-md px-3',
 				smIcon: 'h-9 pr-3 pl-2',
-				lg: 'h-11 rounded-md px-8',
-				lgIcon: 'h-11 pr-8 pl-7',
+				lg: 'h-11 rounded-md px-8 text-base',
+				lgIcon: 'h-11 pr-8 pl-7 text-base',
 				icon: 'h-10 w-10',
 			},
 		},

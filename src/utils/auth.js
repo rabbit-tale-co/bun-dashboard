@@ -13,7 +13,7 @@ const fetchUser = async (accessToken) => {
         Cookies.set('user_data', JSON.stringify(userObject), { expires: 1 }) // Cache for 1 day
         localStorage.setItem(
             'user_data',
-            JSON.stringify({ ...userObject, expiresAt: Date.now() + 86400000 })
+            JSON.stringify({ ...userObject, expiresAt: Date.now() + 86_400_000 })
         ) // 1 day in ms
         isAuthenticated.value = true
     } catch (err) {

@@ -6,6 +6,8 @@ import PublicServers from '@/pages/PublicServers.vue'
 import Help from '@/pages/Help.vue'
 import Status from '@/pages/Status.vue'
 import Dashboard from '@/pages/Dashboard.vue'
+import Premium from '@/pages/Premium.vue'
+import ToS from '@/pages/Tos.vue'
 
 const routes = [
 	{
@@ -55,6 +57,24 @@ const routes = [
 		meta: {
 			title: 'Dashboard',
 			describtion: 'Dashboard page of Tiny Rabbit',
+		},
+	},
+	{
+		path: '/premium',
+		name: 'Premium',
+		component: Premium,
+		meta: {
+			title: 'Premium',
+			describtion: 'Premium page of Tiny Rabbit',
+		},
+	},
+	{
+		path: '/tos',
+		name: 'ToS',
+		component: ToS,
+		meta: {
+			title: 'Terms of Service',
+			describtion: 'Terms of Service page of Tiny Rabbit',
 		},
 	},
 	{
