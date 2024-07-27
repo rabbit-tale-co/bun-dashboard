@@ -22,9 +22,9 @@
                   </a>
                </Button>
                <Button as-child variant="secondary" size="lg">
-                  <router-link to="#/features">
+                  <a href="#features">
                      See features
-                  </router-link>
+                  </a>
                </Button>
                </div>
             </div>
@@ -42,6 +42,6 @@
 </template>
 
 <script setup>
-import { Button } from '@/components/ui/button';
-import { SolidDiscord } from '@/components/ui/icons';
+import { Button } from '@/components/ui/button'
+import { SolidDiscord } from '@/components/ui/icons'
 </script>
