@@ -5,7 +5,7 @@
         'order-first lg:order-last lg:mr-0 lg:ml-auto': props.reverse
       })"
     >
-      <img :src="imageSrc" class="w-full max-w-[560px] rounded-2xl" alt="">
+      <img :src="imageSrc" class="w-full max-w-[560px] rounded-2xl" :alt=title>
     </div>
     <div :class="
       cn('col-span-4 lg:col-span-3 flex flex-col justify-center items-start text-center lg:text-left', {
@@ -17,7 +17,7 @@
       </h2>
       <p class="text-muted-foreground text-base my-8 whitespace-pre-line">{{ description }}</p>
       <div class="w-full flex-col lg:flex-row flex items-center justify-start gap-4">
-        <Button as-child size="lg" class="max-lg:w-full">
+        <Button v-if="primaryButton" as-child size="lg" class="max-lg:w-full">
           <template v-if="primaryButtonExternal">
             <a :href="primaryButtonLink" target="_blank">
               {{ primaryButtonText }}
@@ -29,7 +29,7 @@
             </router-link>
           </template>
         </Button>
-        <Button as-child variant="secondary" size="lg" class="max-lg:w-full">
+        <Button v-if="secondaryButton" as-child variant="secondary" size="lg" class="max-lg:w-full">
           <router-link :to="secondaryButtonLink">
             {{ secondaryButtonText }}
           </router-link>
@@ -45,14 +45,16 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 const props = defineProps({
-  imageSrc: { type: String, required: true },
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  primaryButtonText: { type: String, required: true },
-  primaryButtonLink: { type: String, required: true },
-  primaryButtonExternal: { type: Boolean, required: false, default: false },
-  secondaryButtonText: { type: String, required: true },
-  secondaryButtonLink: { type: String, required: true },
-  reverse: { type: Boolean, required: false, default: false },
+	imageSrc: { type: String, required: true },
+	title: { type: String, required: true },
+	description: { type: String, required: true },
+	primaryButton: { type: Boolean, required: false, default: true },
+	primaryButtonText: { type: String, required: true },
+	primaryButtonLink: { type: String, required: true },
+	primaryButtonExternal: { type: Boolean, required: false, default: false },
+	secondaryButton: { type: Boolean, required: false, default: false },
+	secondaryButtonText: { type: String, required: true },
+	secondaryButtonLink: { type: String, required: true },
+	reverse: { type: Boolean, required: false, default: false },
 })
 </script>
