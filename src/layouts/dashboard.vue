@@ -26,9 +26,9 @@
                <nav class="grid items-start lg:px-5 max-lg:w-14 text-sm font-medium mb-6">
                   <ul class="flex flex-col space-y-2">
                      <li v-for="(item, i) in items" :key="i" class="group hover:cursor-pointer rounded-full">
-                        <Button as-child class="w-full justify-start h-14 max-lg:size-14 relative pl-8" :variant="isActive(item.path) ? 'secondary' : 'ghost'">
+                        <Button as-child class="w-full justify-start h-14 max-lg:size-14 relative pl-9" :variant="isActive(item.path) ? 'secondary' : 'ghost'">
                            <router-link :to="item.path">
-                              <span class="size-1.5 rounded-full absolute left-3" :class="item.enabled ? 'bg-primary' : 'bg-muted-foreground/50'" />
+                              <span class="size-1.5 rounded-full absolute left-4" :class="item.enabled ? 'bg-primary' : 'bg-muted-foreground/50'" />
                               <component class="lg:mr-2" :is="isActive(item.path) ? icons[item.iconSolid] : icons[item.iconOutline]" />
                               <span class="max-lg:hidden">{{ item.title }}</span>
                               <Badge v-if="item.premium" class="ml-auto p-1.5 max-lg:hidden" variant="premium">
@@ -74,9 +74,14 @@
             </Sheet>
             <nav class="ml-auto flex space-x-3 items-center">
                <Button variant="premium" as-child  size="defaultIcon">
-                  <router-link to="/premium">
+                  <router-link to="#">
                      <SolidCarrot class="mr-2"/>
                      Golden Carrot
+                  </router-link>
+               </Button>
+                 <Button variant="ghost" as-child  size="icon">
+                  <router-link to="#">
+                     <SolidCarrot/>
                   </router-link>
                </Button>
                <DropdownMenu>
@@ -84,7 +89,7 @@
                      <Button variant="secondary" size="icon" class="rounded-full">
                         <Avatar v-if="user">
                            <AvatarImage :src="user.avatarUrl" :alt="user.username" />
-                           <AvatarFallback>CN</AvatarFallback>
+                           <AvatarFallback>{{ getInitials(user.username, 2) }}</AvatarFallback>
                         </Avatar>
                         <CircleUser class="h-5 w-5" />
                         <span class="sr-only">Toggle user menu</span>
@@ -205,6 +210,20 @@ const handleNavigation = (path) => {
 }
 
 const { user, checkSession } = useAuth()
+
+/**
+ * Get initials from a username.
+ * @param {string} username - The username to get initials from.
+ * @param {number} [numInitials=1] - The number of initials to extract.
+ * @returns {string} The extracted initials.
+ */
+const getInitials = (username, numInitials = 1) => {
+	const names = username.split(' ')
+	return names
+		.slice(0, numInitials) // Take the first 'numInitials' names
+		.map((name) => name[0]) // Extract the first letter from each
+		.join('') // Join them together
+}
 
 const updatePluginStatus = (event) => {
 	const { pluginId, enabled } = event.detail
