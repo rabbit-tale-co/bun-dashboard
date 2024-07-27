@@ -4,12 +4,12 @@
          v-for="plan in plans"
          :key="plan.name"
          :class="[
-           'w-full md:max-w-[380px] min-w-80 rounded-lg p-5 bg-background text-left relative overflow-hidden flex flex-col justify-start',
-           plan.highlight ? 'ring-1 ring-premium ring-offset-premium shadow-premium' : 'z-10',
+           'md:max-w-[380px] min-w-80 rounded-lg p-5 bg-background relative ',
+           plan.highlight ? 'highlight-card__outline' : 'z-10', //ring-1 ring-premium ring-offset-premium shadow-premium
            plan.left === 0 && 'opacity-50 cursor-not-allowed',
          ]"
        >
-         <header class='flex items-center justify-between ,t-'>
+         <header class='flex items-center justify-between'>
             <h3 class="text-2xl font-semibold text-white">{{ plan.name }}</h3>
             <Badge v-if="plan.save !== 'Save 0%' && plan.save" class="text-success bg-success/[0.12] hover:bg-success/[0.12] text-sm">{{ plan.save }}</Badge>
             <Badge v-if="plan.save === 'Save 0%' && plan.save" class="text-muted-foreground bg-muted-foreground/[0.12] hover:bg-muted-foreground/[0.12] text-sm">{{ plan.save }}</Badge>
@@ -48,7 +48,8 @@ import { OutlineCheck } from '@/components/ui/icons'
 const plans = ref([
 	{
 		name: 'Lifetime',
-		price: '$ 69.99 <span class="text-xl text-muted-foreground">/ Lifetime</span>',
+		price:
+			'$ 69.99 <span class="text-xl text-muted-foreground">/ Lifetime</span>',
 		// save: 'Most popular',
 		description: 'paid only once',
 		benefits: [
@@ -58,7 +59,7 @@ const plans = ref([
 			'One-time payment',
 		],
 		highlight: false,
-      left: 0,
+		left: 0,
 	},
 	{
 		name: 'Annual',
