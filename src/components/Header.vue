@@ -1,3 +1,179 @@
+<script setup>
+import { computed, onMounted, ref, watch } from 'vue'
+import { useColorMode } from '@vueuse/core'
+import {
+	SolidHome,
+	OutlineSunny,
+	OutlineClearNight,
+	SolidDiscord,
+	OutlineHome,
+	OutlineChevronRight,
+	OutlineDiscord,
+	SolidCarrot,
+	OutlineCarrot,
+	OutlineCrown,
+	OutlineMenu,
+	OutlineClose,
+} from '@/components/ui/icons'
+import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+	NavigationMenu,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+	navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu'
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from '@/components/ui/sheet'
+import Separator from '@/components/ui/separator/Separator.vue'
+import useAuth from '@/utils/auth'
+import { useRouter } from 'vue-router'
+import { cn } from '@/lib/utils'
+import { Logo } from '@/components/ui/icons'
+import {
+	DropdownMenu,
+	DropdownMenuTrigger,
+	DropdownMenuContent,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuItem,
+} from './ui/dropdown-menu'
+import { AspectRatio } from './ui/aspect-ratio'
+
+const items = [
+	{
+		path: '/bot',
+		title: 'Tiny Rabbit',
+		iconSolid: SolidHome,
+		iconOutline: OutlineHome,
+	},
+	{
+		path: '/dashbaord',
+		title: 'My Servers',
+		iconSolid: SolidHome,
+		iconOutline: OutlineHome,
+	},
+	{
+		path: 'https://discord.gg/dbHCceKAbc',
+		title: 'Join Our Discord',
+		iconSolid: SolidHome,
+		iconOutline: OutlineHome,
+		external: true,
+	},
+	// {
+	// 	path: '/help',
+	// 	title: 'Help',
+	// 	iconSolid: SolidHome,
+	// 	iconOutline: OutlineHome,
+	// },
+	// {
+	// 	path: '/status',
+	// 	title: 'Status',
+	// 	iconSolid: SolidHome,
+	// 	iconOutline: OutlineHome,
+	// },
+]
+
+const plugins = [
+	{
+		subitems: [
+			{
+				path: '/plugins/engagement-and-fun',
+				title: 'Games & Fun',
+				description: 'Levels, Birthdays, Giveaways, Music Quiz and Economy',
+				external: false,
+			},
+		],
+	},
+	// {
+	// 	subitems: [
+	// 		{ path: '/embeds', title: 'Embeds', description: 'description', external: false },
+	// 		{ path: '/search-anything', title: 'Search Anything', description: 'description', external: false },
+	// 		{ path: '/record', title: 'Record', description: 'description', external: false },
+	// 	],
+	// },
+]
+
+const resources = [
+	{
+		subitems: [
+			{
+				path: '/resources/guide',
+				title: 'Guide',
+				description: 'Comprehensive user guide',
+				external: false,
+			},
+			{
+				path: '/resources/tutorials',
+				title: 'Tutorials',
+				description: 'Step-by-step tutorials',
+				external: false,
+			},
+			{
+				path: '/resources/faqs',
+				title: 'FAQs',
+				description: 'Frequently asked questions',
+				external: false,
+			},
+		],
+	},
+]
+
+const { user, checkSession, checkCallback, isLoggedIn, logout } = useAuth()
+const router = useRouter()
+
+onMounted(() => {
+	if (!isLoggedIn()) {
+		checkCallback()
+	}
+	checkSession()
+})
+
+const avatarFallbackText = computed(() => {
+	return user?.value?.username.slice(0, 2)
+})
+
+const isPluginsMenuOpen = ref(false)
+const isResourcesMenuOpen = ref(false)
+
+const togglePluginsMenu = () => {
+	if (isResourcesMenuOpen.value) {
+		isResourcesMenuOpen.value = false
+	}
+	isPluginsMenuOpen.value = !isPluginsMenuOpen.value
+}
+
+const toggleResourcesMenu = () => {
+	if (isPluginsMenuOpen.value) {
+		isPluginsMenuOpen.value = false
+	}
+	isResourcesMenuOpen.value = !isResourcesMenuOpen.value
+}
+
+const handleNavigation = (path) => {
+	if (path.startsWith('http')) {
+		window.open(path, '_blank')
+	} else {
+		router.push(path)
+	}
+}
+</script>
+
+
 <template>
   <header class="relative w-full bg-background border-b border-backgroundSecondary shadow-lg">
     <section class="flex items-center justify-between max-w-screen-xl px-6 mx-auto">
@@ -278,159 +454,3 @@
     </section>
   </header>
 </template>
-
-<script setup>
-import { computed, onMounted, ref, watch } from 'vue'
-import { useColorMode } from '@vueuse/core'
-import {
-	SolidHome,
-	OutlineSunny,
-	OutlineClearNight,
-	SolidDiscord,
-	OutlineHome,
-	OutlineChevronRight,
-	OutlineDiscord,
-	SolidCarrot,
-	OutlineCarrot,
-	OutlineCrown,
-	OutlineMenu,
-	OutlineClose,
-} from '@/components/ui/icons'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import {
-	NavigationMenu,
-	NavigationMenuItem,
-	NavigationMenuLink,
-	NavigationMenuList,
-	navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu'
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/components/ui/popover'
-import {
-	Sheet,
-	SheetClose,
-	SheetContent,
-	SheetDescription,
-	SheetFooter,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
-} from '@/components/ui/sheet'
-import Separator from '@/components/ui/separator/Separator.vue'
-import useAuth from '@/utils/auth'
-import { useRouter } from 'vue-router'
-import { cn } from '@/lib/utils'
-import { Logo } from '@/components/ui/icons'
-import {
-	DropdownMenu,
-	DropdownMenuTrigger,
-	DropdownMenuContent,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuItem,
-} from './ui/dropdown-menu'
-import { AspectRatio } from './ui/aspect-ratio'
-
-const items = [
-	{
-		path: '/bot',
-		title: 'Tiny Rabbit',
-		iconSolid: SolidHome,
-		iconOutline: OutlineHome,
-	},
-	{
-		path: '/dashbaord',
-		title: 'My Servers',
-		iconSolid: SolidHome,
-		iconOutline: OutlineHome,
-	},
-	{
-		path: 'https://discord.gg/dbHCceKAbc',
-		title: 'Join Our Discord',
-		iconSolid: SolidHome,
-		iconOutline: OutlineHome,
-		external: true,
-	},
-	// {
-	// 	path: '/help',
-	// 	title: 'Help',
-	// 	iconSolid: SolidHome,
-	// 	iconOutline: OutlineHome,
-	// },
-	// {
-	// 	path: '/status',
-	// 	title: 'Status',
-	// 	iconSolid: SolidHome,
-	// 	iconOutline: OutlineHome,
-	// },
-]
-
-const plugins = [
-	{
-		subitems: [
-			{ path: '/plugins/engagement-and-fun', title: 'Games & Fun', description: 'Levels, Birthdays, Giveaways, Music Quiz and Economy', external: false },
-		],
-	},
-	// {
-	// 	subitems: [
-	// 		{ path: '/embeds', title: 'Embeds', description: 'description', external: false },
-	// 		{ path: '/search-anything', title: 'Search Anything', description: 'description', external: false },
-	// 		{ path: '/record', title: 'Record', description: 'description', external: false },
-	// 	],
-	// },
-]
-
-const resources = [
-  {
-    subitems: [
-      { path: '/resources/guide', title: 'Guide', description: 'Comprehensive user guide', external: false },
-      { path: '/resources/tutorials', title: 'Tutorials', description: 'Step-by-step tutorials', external: false },
-      { path: '/resources/faqs', title: 'FAQs', description: 'Frequently asked questions', external: false },
-    ],
-  },
-]
-
-const { user, checkSession, checkCallback, isLoggedIn, logout } = useAuth()
-const router = useRouter()
-
-onMounted(() => {
-  if (!isLoggedIn()) {
-    checkCallback()
-  }
-  checkSession()
-})
-
-
-const avatarFallbackText = computed(() => {
-	return user?.value?.username.slice(0, 2)
-})
-
-const isPluginsMenuOpen = ref(false)
-const isResourcesMenuOpen = ref(false)
-
-const togglePluginsMenu = () => {
-	if (isResourcesMenuOpen.value) {
-		isResourcesMenuOpen.value = false
-	}
-	isPluginsMenuOpen.value = !isPluginsMenuOpen.value
-}
-
-const toggleResourcesMenu = () => {
-	if (isPluginsMenuOpen.value) {
-		isPluginsMenuOpen.value = false
-	}
-	isResourcesMenuOpen.value = !isResourcesMenuOpen.value
-}
-
-const handleNavigation = (path) => {
-	if (path.startsWith('http')) {
-		window.open(path, '_blank')
-	} else {
-		router.push(path)
-	}
-}
-</script>
