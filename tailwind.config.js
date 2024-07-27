@@ -21,6 +21,9 @@ module.exports = {
          },
       },
       extend: {
+         ringWidth: {
+            '3': '3px',
+         },
          dropShadow: {
             'golden-carrot': '0 0px 35px hsla(var(--premium))',
          },
