@@ -13,11 +13,22 @@ const fetchUserData = async (accessToken) => {
 
 		const userData = await response.json()
 		console.log('Fetched user data:', userData)
+
+		// Determine the avatar URL
+		let avatarUrl
+		if (userData.avatar) {
+			const isAnimated = userData.avatar.startsWith('a_')
+			const extension = isAnimated ? 'gif' : 'webp'
+			avatarUrl = `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.${extension}`
+		} else {
+			avatarUrl = null
+		}
+
 		return {
 			id: userData.id,
 			username: userData.username,
 			globalName: userData.global_name,
-			avatarUrl: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.webp`,
+			avatarUrl,
 			bannerUrl: userData.banner
 				? `https://cdn.discordapp.com/banners/${userData.id}/${userData.banner}.webp`
 				: null,
@@ -29,6 +40,7 @@ const fetchUserData = async (accessToken) => {
 		throw err
 	}
 }
+
 
 export { fetchUserData }
 
