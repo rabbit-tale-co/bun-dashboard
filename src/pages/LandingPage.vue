@@ -2,22 +2,24 @@
   <Hero />
   <Leaderboard />
   <Servers :servers="displayedServers" :serverCount="serverCount" />
-  <section class="mx-auto w-full max-w-screen-xl p-6 lg:py-10">
+  <section id="features" class="mx-auto w-full max-w-screen-xl p-6 lg:py-10">
     <div class="grid grid-cols-1 gap-12 lg:gap-36">
       <Features v-for="(feature, index) in features" :key="index"
         :imageSrc="feature.imageSrc"
         :title="feature.title"
         :description="feature.description"
+		  :primaryButton="feature.primaryButton"
         :primaryButtonText="feature.primaryButtonText"
         :primaryButtonLink="feature.primaryButtonLink"
         :primaryButtonExternal="feature.primaryButtonExternal"
+		  :secondaryButton="feature.secondaryButton"
         :secondaryButtonText="feature.secondaryButtonText"
         :secondaryButtonLink="feature.secondaryButtonLink"
         :reverse="index % 2 !== 0"
       />
     </div>
   </section>
-  <section class="relative z-10">
+  <section id="trusted-servers" class="relative z-10">
     <div class="absolute h-5/6 lg:h-3/4 w-full bg-background -z-10" />
     <div class="mx-auto w-full max-w-screen-xl text-center p-6 lg:py-10">
       <h2 class="text-white mx-auto max-w-xl font-bold text-4xl leading-tight">Tiny Rabbit is trusted and used by {{ serverCount }} servers</h2>
@@ -57,38 +59,42 @@ const {
 const features = [
 	{
 		imageSrc: 'welcome_show.png',
-		title: 'Lorem ipsum dolor sit amet.',
+		title: 'Creative welcome messages',
 		description:
-			'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo quisquam illo vitae quia dolores optio rem quod nam inventore, incidunt, necessitatibus quibusdam consequatur dicta ut. Vitae dignissimos repellat voluptate cumque.',
+			"Make every member feel special with personalized welcome and leave messages! Whether you're greeting new members or bidding farewell, this feature allows you to craft unique messages that reflect the personality and values of your server. Create a warm and inviting atmosphere by customizing your welcome messages to include special greetings, rules, or fun facts about your community. Similarly, leave messages can offer a heartfelt goodbye, ensuring that every member leaves with a positive impression. Tailor these messages to your liking and ensure a memorable experience for everyone in your server.",
+		primaryButton: true,
 		primaryButtonText: 'Add to Discord',
 		primaryButtonLink:
 			'https://discord.com/oauth2/authorize?client_id=1207315441614331904&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fapi.rabbittale.co%2Fcallback&integration_type=0&scope=bot+identify+guilds+email+guilds.members.read+messages.read',
 		primaryButtonExternal: true,
+		secondaryButton: false,
 		secondaryButtonText: 'button',
 		secondaryButtonLink: '#',
 	},
 	{
 		imageSrc: 'hero.png',
-		title: 'Lorem ipsum dolor sit amet.',
+		title: 'Support Tickets',
 		description:
 			'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo quisquam illo vitae quia dolores optio rem quod nam inventore, incidunt, necessitatibus quibusdam consequatur dicta ut. Vitae dignissimos repellat voluptate cumque.',
+		primaryButton: true,
 		primaryButtonText: 'button',
 		primaryButtonLink: '#',
 		primaryButtonExternal: false,
+		secondaryButton: true,
 		secondaryButtonText: 'button',
 		secondaryButtonLink: '#',
 	},
-	{
-		imageSrc: 'hero.png',
-		title: 'Lorem ipsum dolor sit amet.',
-		description:
-			'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo quisquam illo vitae quia dolores optio rem quod nam inventore, incidunt, necessitatibus quibusdam consequatur dicta ut. Vitae dignissimos repellat voluptate cumque.',
-		primaryButtonText: 'button',
-		primaryButtonLink: '#',
-		primaryButtonExternal: false,
-		secondaryButtonText: 'button',
-		secondaryButtonLink: '#',
-	},
+	// {
+	// 	imageSrc: 'hero.png',
+	// 	title: 'Lorem ipsum dolor sit amet.',
+	// 	description:
+	// 		'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo quisquam illo vitae quia dolores optio rem quod nam inventore, incidunt, necessitatibus quibusdam consequatur dicta ut. Vitae dignissimos repellat voluptate cumque.',
+	// 	primaryButtonText: 'button',
+	// 	primaryButtonLink: '#',
+	// 	primaryButtonExternal: false,
+	// 	secondaryButtonText: 'button',
+	// 	secondaryButtonLink: '#',
+	// },
 ]
 
 const allServers = ref([])
@@ -97,24 +103,26 @@ const displayedServers = ref([])
 const serverCount = computed(() => allServers.value.length)
 
 const updateDisplayedServers = () => {
-  const screenWidth = window.innerWidth
-  let serversToDisplay
+	const screenWidth = window.innerWidth
+	let serversToDisplay
 
-  const sortedServers = allServers.value.sort((a, b) => b.memberCount - a.memberCount)
+	const sortedServers = allServers.value.sort(
+		(a, b) => b.memberCount - a.memberCount,
+	)
 
-  if (screenWidth >= 1024) {
-    serversToDisplay = sortedServers.slice(0, 8)
-  } else {
-    serversToDisplay = sortedServers.slice(0, 3)
-  }
+	if (screenWidth >= 1024) {
+		serversToDisplay = sortedServers.slice(0, 8)
+	} else {
+		serversToDisplay = sortedServers.slice(0, 3)
+	}
 
-  displayedServers.value = serversToDisplay.map((guild) => ({
-    link: guild.link,
-    imageSrc: guild.imageSrc,
-    serverName: guild.serverName,
-    memberCount: guild.memberCount,
-    isCommunity: guild.isCommunity,
-  }))
+	displayedServers.value = serversToDisplay.map((guild) => ({
+		link: guild.link,
+		imageSrc: guild.imageSrc,
+		serverName: guild.serverName,
+		memberCount: guild.memberCount,
+		isCommunity: guild.isCommunity,
+	}))
 }
 
 const handleResize = () => {
