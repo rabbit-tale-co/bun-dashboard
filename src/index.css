@@ -7,19 +7,19 @@
 
 @layer base {
    :root {
-      --background: 228, 7%, 73%;
-      --background-secondary: 250, 14%, 94%;
-      --foreground: 232, 21%, 14%;
+      --background: 228 7% 73%;
+      --background-secondary: 250 14% 94%;
+      --foreground: 232 21% 14%;
 
-      --muted: 221, 14%, 82%;
+      --muted: 221 14% 82%;
       --muted-foreground: 220 8.9% 46.1%;
 
       --popover: 0 0% 100%;
       --popover-foreground: 224 71.4% 4.1%;
 
-      --card: 221, 14%, 82%;
+      --card: 221 14% 82%;
       --card-foreground: 224 71.4% 4.1%;
-      --card-hover: 228, 7%, 73%;
+      --card-hover: 228 7% 73%;
 
       --border: 220 13% 91%;
       --input: 220 13% 91%;
@@ -43,14 +43,25 @@
 
       --radius: 0.75rem;
 
-      --text: 232, 21%, 14%;
-      --background: 228, 10%, 90%;
+      --text: 232 21% 14%;
+      --background: 228 10% 90%;
 
-      --primary: 231, 66%, 59%;
+      --primary: 231 66% 59%;
 
-      --secondary: 221, 14%, 82%;
+      --secondary: 221 14% 82%;
 
-      --accent: 45, 100%, 20%;
+      --accent: 45 100% 20%;
+
+      --vis-tooltip-background-color: none !important;
+      --vis-tooltip-border-color: none !important;
+      --vis-tooltip-text-color: none !important;
+      --vis-tooltip-shadow-color: none !important;
+      --vis-tooltip-backdrop-filter: none !important;
+      --vis-tooltip-padding: none !important;
+
+      --vis-primary-color: 231 66% 59%;
+      --vis-secondary-color: 160 81% 40%;
+      --vis-text-color: var(--muted-foreground);
    }
 
    .dark {
@@ -106,6 +117,7 @@
       --foreground: 232, 21%, 86%;
 
       --primary: 232, 50%, 70%;
+      /* --primary: 240, 100%, 73%; */
       --primary-foreground: 231, 52%, 5%;
 
       --secondary: 228, 7%, 27%;
@@ -140,7 +152,7 @@
       @apply border-border;
    }
    html {
-      @apply h-full
+      @apply h-full scroll-smooth
    }
    body {
       @apply bg-backgroundSecondary text-foreground w-screen h-full max-h-screen overflow-x-hidden p-0 mx-auto scroll-smooth;
@@ -225,4 +237,36 @@ img.emoji:not(:last-of-type) {
       opacity: 1;
       animation: none;
    }
+}
+
+@layer base {
+  @property --angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+  }
+
+  @keyframes spin {
+    to {
+      --angle: 360deg;
+    }
+  }
+}
+@layer utilities {
+
+  .highlight-card__outline::after,
+  .highlight-card__outline::before {
+      --offset: 0.25rem;
+      @apply rounded-lg absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10;
+      content: '';
+      /* background: conic-gradient(from var(--angle), #ff4545, #00ff99, #006aff, #ff0095, #ff4545); */
+      background: conic-gradient(from var(--angle), transparent 70%, hsla(var(--premium)));
+      height: calc(100% + var(--offset));
+      width: calc(100% + var(--offset));
+      animation: spin 10s linear infinite;
+  }
+
+  .highlight-card__outline::before {
+      @apply blur-md opacity-50
+  }
 }
