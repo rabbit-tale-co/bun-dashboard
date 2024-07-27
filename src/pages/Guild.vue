@@ -39,9 +39,7 @@ import {
 	SolidSend,
 } from '@/components/ui/icons'
 import { toast } from 'vue-sonner'
-// import { plugins } from '@/lib/plugins'
 import { LineChart } from '@/components/ui/chart-line'
-import { fetchAvailablePlugins } from '@/api/plugins'
 import { usePlugins } from '@/hooks/usePlugins'
 
 const data = [
@@ -157,7 +155,7 @@ onMounted(async () => {
 		router.push('/')
 		return
 	}
-	if (guild.value.id) {
+	if (guild.value?.id) {
 		await fetchPlugins(guild.value.id)
 	}
 })
@@ -167,13 +165,9 @@ onMounted(async () => {
    <section
       class="prose max-w-full dark:prose-invert prose-p:my-2 prose-headings:font-semibold prose-img:rounded-3xl space-y-6"
    >
-      <!-- <h1>Server Info</h1> -->
       <p v-if="loading">Loading...</p>
       <p v-if="error">{{ error }}</p>
-      <header
-         v-if="!loading && !error && guild"
-         class="flex items-start space-x-4"
-      >
+      <header v-if="!loading && !error && guild" class="flex items-start space-x-4">
          <img
             v-if="guild.icon"
             :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp?size=4096`"
@@ -183,21 +177,10 @@ onMounted(async () => {
          <div>
             <h3 class="my-0">{{ guild.name }}</h3>
             <p class="!my-0 leading-tight">
-               {{ guild.description || 'No description avainable.' }}
+               {{ guild.description || 'No description available.' }}
             </p>
          </div>
       </header>
-
-      <!-- <LineChart
-         :data="data"
-         index="year"
-         :categories="['Export Growth Rate', 'Import Growth Rate']"
-         :y-formatter="(tick, i) => {
-            return typeof tick === 'number'
-            ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
-            : ''
-         }"
-      /> -->
 
       <article class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card class="flex-col h-full">
@@ -255,9 +238,6 @@ onMounted(async () => {
                   </li>
                </ul>
             </CardContent>
-            <!-- <CardFooter>
-               <Button variant="secondary">Copy server ID</Button>
-            </CardFooter> -->
          </Card>
          <Card
             v-if="!loading && !error && guild"
@@ -268,7 +248,6 @@ onMounted(async () => {
                   <div class="flex size-14 bg-primary items-center justify-center rounded-xl">
                      <SolidCarrot size="32" class="text-primary-foreground" />
                   </div>
-                  <!-- <Button variant="secondary">Copy server ID</Button> -->
                </div>
                <CardTitle class="text-lg not-prose">
                   Channels Info
@@ -327,8 +306,9 @@ onMounted(async () => {
             </Card>
          </router-link>
       </article>
+   </section>
 
-      <!-- <Select v-if="!loading && !error && roles.length > 0">
+   <!-- <Select v-if="!loading && !error && roles.length > 0">
          <SelectTrigger class="w-[280px]">
             <SelectValue placeholder="Select a role" />
          </SelectTrigger>
@@ -373,5 +353,4 @@ onMounted(async () => {
             />
          </DialogContent>
       </Dialog> -->
-   </section>
 </template>
