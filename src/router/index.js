@@ -8,6 +8,7 @@ import Status from '@/pages/Status.vue'
 import Dashboard from '@/pages/Dashboard.vue'
 import Premium from '@/pages/Premium.vue'
 import ToS from '@/pages/Tos.vue'
+import PluginConfig from '@/pages/PluginConfig.vue'
 
 const routes = [
 	{
@@ -81,20 +82,30 @@ const routes = [
 		path: '/manage/:guildID',
 		name: 'Guild',
 		component: Guild,
+		// children: [
+		// 	// {
+		// 	// 	path: '',
+		// 	// 	name: 'Dashboard',
+		// 	// 	component: OtherPage,
+		// 	// },
+		// 	{
+		// 		path: 'plugin/:pluginID',
+		// 		name: 'PluginConfig',
+		// 		component: PluginConfig,
+		// 		props: true,
+		// 	},
+		// ],
 		meta: {
 			title: 'Guild',
 			describtion: 'Guild page of Tiny Rabbit',
 		},
 	},
 	{
-		path: '/manage/:guildID/commands',
-		name: 'Commands',
-		component: GuildCommands,
-		meta: {
-			title: 'Commands',
-			describtion: 'Commands page of Tiny Rabbit',
-		},
-	},
+		path: '/manage/:guildID/:pluginID',
+		name: 'PluginConfig',
+		component: PluginConfig,
+		meta: { title: 'Plugin Config', description: 'Configure your plugin' },
+	}
 ]
 
 const router = createRouter({
